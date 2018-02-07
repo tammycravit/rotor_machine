@@ -26,6 +26,7 @@ require 'spec_helper'
 require 'rotor_machine'
 
 RSpec.describe "RotorMachine::Plugboard" do
+
   context "normal operation" do
 
     before(:each) do
@@ -71,16 +72,20 @@ RSpec.describe "RotorMachine::Plugboard" do
       @plugboard.connect("A", "B")
     end
 
-    it "doesn't allow the same letter to be connected twice" do
+    it "shouldn't allow the same letter to be connected twice" do
       expect { @plugboard.connect("A", "F")}.to raise_error(ArgumentError, "A is already connected")
-      expect { @plugboard.connect("B", "Q")}.to raise_error(ArgumentError, "B is already connected")
+      expect { @plugboard.connect("Q", "B")}.to raise_error(ArgumentError, "B is already connected")
       @plugboard.disconnect("A")
       expect { @plugboard.connect("A", "F")}.not_to raise_error
       expect { @plugboard.connect("B", "Q")}.not_to raise_error
     end
 
-    it "doesn't allow a letter to be connected to itself" do
+    it "shouldn't allow a letter to be connected to itself" do
       expect {@plugboard.connect("D", "D")}.to raise_error(ArgumentError, "D cannot be connected to itself")
+    end
+
+    it "shouldn't allow you to disconnect a letter that's not connected" do
+      expect{@plugboard.disconnect('X')}.to raise_error(ArgumentError, 'X is not connected')
     end
   end
 end

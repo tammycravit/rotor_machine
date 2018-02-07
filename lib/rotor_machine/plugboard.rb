@@ -5,15 +5,9 @@ module RotorMachine
     end
 
     def connect(from, to)
-      if (connected?(from))
-        raise ArgumentError, "#{from} is already connected"
-      end
-      if (connected?(to))
-        raise ArgumentError, "#{to} is already connected"
-      end
-      if from == to
-        raise ArgumentError, "#{from} cannot be connected to itself"
-      end
+      raise ArgumentError, "#{from} is already connected" if (connected?(from))
+      raise ArgumentError, "#{to} is already connected" if (connected?(to))
+      raise ArgumentError, "#{from} cannot be connected to itself" if (to == from)
 
       @connections[from] = to
       @connections[to] = from
