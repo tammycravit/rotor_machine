@@ -1,8 +1,10 @@
 ############################################################################
 # rotor_machine: Simple ruby implemenation of an Enigma rotor machine.
 #
-# File        : rotor_machine_spec.rb
-# Specs for   : Global properties of the rotor_machine gem"
+# File        : reflector_spec
+# Specs for   : The reflector, a fixed rotor which directs letters back
+#               through the rotors in reverse order. The reflector is what
+#               makes the Enigma machine's encryption symmetrical.
 ############################################################################
 #  Copyright 2018, Tammy Cravit.
 # 
@@ -23,5 +25,5 @@ require 'rspec'
 require 'spec_helper'
 require 'rotor_machine'
 
-RSpec.describe "RotorMachine" do
+RSpec.describe "RotorMachine::Reflector" do
 end

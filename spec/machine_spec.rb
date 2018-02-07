@@ -1,8 +1,10 @@
 ############################################################################
 # rotor_machine: Simple ruby implemenation of an Enigma rotor machine.
 #
-# File        : rotor_machine_spec.rb
-# Specs for   : Global properties of the rotor_machine gem"
+# File        : machine_spec.rb
+# Specs for   : The "machine deck", which brings together a collection of
+#               rotors, a plugboard, and a reflector and provides a
+#               complete machine.
 ############################################################################
 #  Copyright 2018, Tammy Cravit.
 # 
@@ -23,5 +25,5 @@ require 'rspec'
 require 'spec_helper'
 require 'rotor_machine'
 
-RSpec.describe "RotorMachine" do
+RSpec.describe "RotorMachine::Machine" do
 end

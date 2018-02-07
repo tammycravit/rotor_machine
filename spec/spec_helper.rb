@@ -1,19 +1,23 @@
 require "bundler/setup"
 require "rotor_machine"
 require "fileutils"
-require "factory_bot"
+require 'tcravit_ruby_lib'
 
 Dir["./spec/support/**/*.rb"].each {|f| require f}
 
+# A quick-and-dirty method to load RSpec helper files in spec/support
+def require_helper_named(helper_name)
+  require "#{File.join(File.dirname(__FILE__), "support", "#{helper_name}.rb")}"
+end
+
+# A quick-and-dirty method to load RSpec matchers in spec/support/matchers
+def require_custom_matcher_named(matcher_name)
+  require "#{File.join(File.dirname(__FILE__), "support", "matchers", "#{matcher_name}_matcher.rb")}"
+end
+
 RSpec.configure do |config|
-  config.include FactoryBot::Syntax::Methods
-
-  # Enable flags like --only-failures and --next-failure
   config.example_status_persistence_file_path = ".rspec_status"
-
-  # Disable RSpec exposing methods globally on `Module` and `main`
   config.disable_monkey_patching!
-
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
