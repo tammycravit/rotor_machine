@@ -12,7 +12,7 @@ module RotorMachine
     ROTOR_III = "JVIUBHTCDYAKEQZPOSGXNRMWFL".freeze
     ROTOR_UKW = "QYHOGNECVPUZTFDJAXWMKISRBL".freeze
     ROTOR_ETW = "QWERTZUIOASDFGHJKPYXCVBNML".freeze
-    ROTOR_TEST = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".freeze
+    ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".freeze
 
     def initialize(rotor, start_on=0, step_size=1)
       @letters = rotor.chars.freeze
@@ -29,6 +29,22 @@ module RotorMachine
         @position = pos
       else
         raise ArgumentError, "Invalid argument to position= (#{pos.class.to_s})"
+      end
+    end
+
+    def forward(letter)
+      if ALPHABET.include?(letter)
+        @letters[((ALPHABET.index(letter) + self.position) % @letters.length)]
+      else
+        letter
+      end
+    end
+
+    def reverse(letter)
+      if ALPHABET.include?(letter)
+        ALPHABET[((@letters.index(letter) - self.position) % @letters.length)]
+      else
+        letter
       end
     end
 

@@ -146,29 +146,22 @@ RSpec.describe "RotorMachine::Rotor" do
   end
 
   context "basic operation" do
-
     it "should allow you to encipher a letter" do
-      pending
+      expect(@rotor.forward("C")).to be == "L"
     end
 
     it "should allow you to encipher in both directions" do
-      pending
+      expect(@rotor.reverse("L")).to be == "C"
     end
 
-    it "should step the position after you encipher a letter" do
-      pending
+    it "should have symmetric forward and reverse transformations" do
+      RotorMachine::Rotor::ALPHABET.chars.each { |c| expect(@rotor.reverse(@rotor.forward(c))).to be == c }
     end
 
-    it "should allow you to encipher multiple letters and step correctly" do
-      pending
-    end
 
     it "should pass-through non-alphabetic characters unchanged" do
-      pending
-    end
-
-    it "should never encipher a character to itself" do
-      pending
+      "1234567890!@^&*()".chars.each { |c| expect(@rotor.forward(c)).to be == c }
+      "1234567890!@^&*()".chars.each { |c| expect(@rotor.reverse(c)).to be == c }
     end
   end
 
