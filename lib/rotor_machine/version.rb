@@ -1,3 +1,4 @@
 module RotorMachine
-  VERSION = "0.1.0"
+  VERSION_DATA = [1, 0, 0]
+  VERSION = VERSION_DATA.join(".")
 end
