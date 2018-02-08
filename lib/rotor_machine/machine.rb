@@ -140,7 +140,7 @@ module RotorMachine
     def encipher(text)
       raise ArgumentError, "Cannot encipher; no rotors loaded" if (@rotors.count == 0)
       raise ArgumentError, "Cannot encipher; no reflector loaded" if (@reflector.nil?)
-      text.upcase.chars.collect { |c| self.encipher_char(c) }.join("")
+      RotorMachine::Machine.letter_blocks(text.upcase.chars.collect { |c| self.encipher_char(c) }.join(""), 5)
     end
 
     ##
@@ -214,7 +214,9 @@ module RotorMachine
         ec = @plugboard.transpose(ec)
       end
 
-      self.step_rotors
+      unless ec == c
+        self.step_rotors
+      end
       ec
     end
 
