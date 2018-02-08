@@ -92,6 +92,10 @@ RSpec.describe "RotorMachine::Rotor" do
         expect(@rotor.class).to be_const_defined("ROTOR_#{rk}")
       end
     end
+
+    it "should be able to describe itself" do
+      expect(@rotor.to_s).to be == "a RotorMachine::Rotor of type 'ROTOR_I', position=20 (K), step_size=1"
+    end
   end
 
   context "rotor positioning" do
@@ -154,10 +158,6 @@ RSpec.describe "RotorMachine::Rotor" do
       @rotor.position = 2
       @rotor.step
       expect(@rotor.position).to be == 4
-    end
-
-    it "should be able to describe itself" do
-      expect(@rotor.to_s).to be == "a RotorMachine::Rotor of type 'ROTOR_I', position=20 (K), step_size=1"
     end
   end
 
