@@ -9,7 +9,7 @@ for idiomatic conciseness. My aims were fairly modular code and a relatively
 complete RSpec test suite.
 
 Many thanks to Kevin Sylvestre, whose 
-[blog post](https://ksylvest.com/posts/2015-01-03/the-enigma-machine-using-ruby blog post) 
+[blog post](https://ksylvest.com/posts/2015-01-03/the-enigma-machine-using-ruby) 
 helped me understand some aspects of the internal workings of the Enigma and 
 how the signals flowed through the pieces of the machine.
 
@@ -76,6 +76,9 @@ from left to right. The signal then passes through the reflector (where it
 is transposed again), then back through the rotors in reverse order, and 
 finally back through the plugboard a second time before being displayed on
 the light grid and/or printer.
+
+[https://commons.wikimedia.org/wiki/File:Enigma_wiring_kleur.svg] depicts
+this visually.
   
 One important consequence of this signal path is that encryption and
 decryption are the same operation. That is to say, if you set the rotors
@@ -138,18 +141,44 @@ are also instructive for how the library works and how to use it.
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+After checking out the repo, run `bin/setup` to install dependencies. Then, 
+run `rake spec` to run the tests. You can also run `bin/console` for an 
+interactive prompt that will allow you to experiment.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+To install this gem onto your local machine, run `bundle exec rake install`. 
+
+To release a new version, update the version number in `version.rb`, and then 
+run `bundle exec rake release`, which will create a git tag for the version, 
+push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+
+This gem depends on the `tcravit_ruby_lib` gem, which provides Rake tasks to
+update the version number. You can use the `bundle exec rake version:bump:build`,
+`bundle exec version:bump:minor` and `bundle exec rake version:bump:major` tasks
+to increment the parts of the version number. (These tasks rewrite the file
+`lib/rotor_machine/version.rb`). After using them, you'll need to run a
+`git add lib/rotor_machine/version.rb` and `git commit -m "version bump"`.
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/tammycravit/rotor_machine. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at 
+[https://github.com/tammycravit/rotor_machine]. Pull requests for code changes 
+should include [RSpec](http://rspec.info) tests for the new/changed features.
+Pull requests for documentation and other updates are also welcome.
+
+This project is intended to be a safe, welcoming space for collaboration, and 
+contributors are expected to adhere to the 
+[Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Contributions from people who identify as women, BIPOC folx, LGBT folx, 
+and members of other marginalized communities are especially welcomed.
 
 ## License
 
-The gem is available as open source under the terms of the [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) license.
+The gem is available as open source under the terms of the 
+[Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) license.
 
 ## Code of Conduct
 
-Everyone interacting in the RotorMachine project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.comtammycravitrotor_machine/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the RotorMachine project’s codebases, issue trackers, 
+chat rooms and mailing lists is expected to follow the 
+[code of conduct](https://github.com/tammycravit/rotor_machine/blob/master/CODE_OF_CONDUCT.md).
+
