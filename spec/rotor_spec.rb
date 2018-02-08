@@ -124,6 +124,14 @@ RSpec.describe "RotorMachine::Rotor" do
       expect(@rotor.position).to be == 0
     end
 
+    it "should know if the rotor wrapped on the last step" do
+      @rotor.position = 25
+      @rotor.step
+      expect(@rotor.wrapped?).to be_truthy
+      @rotor.step
+      expect(@rotor.wrapped?).not_to be_truthy
+    end
+
     it "should allow you to step the rotor by a different amount" do
       @rotor.position = 0
       @rotor.step 2

@@ -2,6 +2,7 @@ require "bundler/setup"
 require "rotor_machine"
 require "fileutils"
 require 'tcravit_ruby_lib'
+require 'pry'
 
 Dir["./spec/support/**/*.rb"].each {|f| require f}
 

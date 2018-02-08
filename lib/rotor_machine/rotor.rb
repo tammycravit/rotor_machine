@@ -18,6 +18,7 @@ module RotorMachine
       @letters = rotor.chars.freeze
       self.position = start_on
       @step_size = step_size
+      @wrapped = nil
     end
 
     def position=(pos)
@@ -49,7 +50,9 @@ module RotorMachine
     end
 
     def step(step_size=@step_size)
+      old_position = @position
       @position = (@position + step_size) % @letters.length
+      @wrapped = (old_position > @position)
     end
 
     def current_letter
@@ -58,6 +61,10 @@ module RotorMachine
 
     def rotor_kind
       @letters.join("")
+    end
+
+    def wrapped?
+      @wrapped
     end
   end
 end
