@@ -5,3 +5,4 @@ require "tcravit_ruby_lib/rake_tasks"
 RSpec::Core::RakeTask.new(:spec)
 
 task :default => :spec
+task :release => "release:prepare".to_sym
