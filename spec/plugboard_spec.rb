@@ -64,6 +64,10 @@ RSpec.describe "RotorMachine::Plugboard" do
       expect(@plugboard.connected?("A")).to be_truthy
       expect(@plugboard.connected?("Z")).not_to be_truthy
     end
+
+    it "knows how to describe itself" do
+      expect(@plugboard.to_s).to be == "a RotorMachine::Plugboard with connections: {\"A\"=>\"B\", \"B\"=>\"A\"}"
+    end
   end
 
   context "error handling" do

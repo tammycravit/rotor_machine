@@ -29,5 +29,9 @@ module RotorMachine
     def connected?(letter)
       @connections.keys.include?(letter)
     end
+
+    def to_s
+      "a RotorMachine::Plugboard with connections: #{@connections.to_s}"
+    end
   end
 end
