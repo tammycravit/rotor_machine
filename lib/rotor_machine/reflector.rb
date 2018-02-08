@@ -22,5 +22,10 @@ module RotorMachine
           c 
         end }.join("")
     end
+
+    def reflector_kind_name
+      self.class.constants.each { |r| return r if (@letters.join("") == self.class.const_get(r)) }
+      return :CUSTOM
+    end
   end
 end
