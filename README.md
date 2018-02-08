@@ -1,10 +1,17 @@
 # RotorMachine
 
-The RotorMAchine gem provides a simple Ruby implementation of the [Enigma](https://en.wikipedia.org/wiki/Enigma_machine) rotor encryption machine.
+The `RotorMachine` gem provides a simple Ruby implementation of the 
+[Enigma](https://en.wikipedia.org/wiki/Enigma_machine) rotor encryption machine.
 
-I wrote RotorMachine primarily as an exercise in Test-Driven Development with RSpec. It is not intended to be efficient or performant, and I wasn't striving much for idiomatic conciseness. My aims were fairly modular code and a relatively complete RSpec test suite.
+I wrote RotorMachine primarily as an exercise in Test-Driven Development with 
+RSpec. It is not intended to be efficient or performant, and I wasn't striving much 
+for idiomatic conciseness. My aims were fairly modular code and a relatively 
+complete RSpec test suite.
 
-Many thanks to Kevin Sylvestre, whose [blog post](https://ksylvest.com/posts/2015-01-03/the-enigma-machine-using-ruby blog post) helped me understand some aspects of the internal workings of the Enigma and how the signals flowed through the pieces of the machine.
+Many thanks to Kevin Sylvestre, whose 
+[blog post](https://ksylvest.com/posts/2015-01-03/the-enigma-machine-using-ruby blog post) 
+helped me understand some aspects of the internal workings of the Enigma and 
+how the signals flowed through the pieces of the machine.
 
 ## Installation
 
@@ -22,7 +29,7 @@ Or install it yourself as:
 
     $ gem install rotor_machine
 
-## Usage
+## Architecture
 
 The `RotorMachine::Machine` class serves as the entrypoint and orchestrator for an Enigma machine.
   
@@ -81,7 +88,7 @@ One consequence of the Enigma's design is that a plaintext letter will
 never encipher to itself. The Allies were able to exploit this property
 to help break the Enigma's encryption in World War II.
   
-### Usage
+## Usage
 
 To use the RotorMachine Enigma machine, you need to perform the following
 steps:
@@ -99,6 +106,35 @@ The `#default_machine` and `#empty_machine` class methods are shortcut
 factory methods whcih set up, respectively, a fully configured machine 
 with a default set of rotors and reflector, and an empty machine with
 no rotors or reflector.
+
+## Example
+
+```ruby
+require 'rotor_machine'
+
+machine = RotorMachine::Machine.empty_machine
+machine.rotors << RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_I, "A", 1)
+machine.rotors << RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_II, "A", 1)
+machine.rotors << RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_III, "A", 1)
+machine.reflector = RotorMachine::Reflector.new(RotorMachine::Reflector::REFLECTOR_A)
+machine.plugboard.connect("A", "M")
+machine.plugboard.connect("Q", "K")
+
+machine.set_rotors("CFL")
+plaintext = "This is a super secret message".upcase
+ciphertext = machine.encipher(plaintext)      # => "MYGM AO I VVTDI QZXMGY AOGVIRJ"
+
+machine.set_rotors("CFL")
+new_plaintext = machine.encipher(ciphertext)  # => "THIS IS A SUPER SECRET MESSAGE"
+
+new_plaintext == plaintext                    # => true
+```
+
+## Documentation
+
+The classes in `rotor_machine/lib/rotor_machine/*.rb` all contain doc comments that 
+pretty exhaustively describe their operation. The RSpec tests in the `spec/` directory
+are also instructive for how the library works and how to use it.
 
 ## Development
 
