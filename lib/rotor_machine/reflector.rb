@@ -27,5 +27,9 @@ module RotorMachine
       self.class.constants.each { |r| return r if (@letters.join("") == self.class.const_get(r)) }
       return :CUSTOM
     end
+
+    def to_s
+      "a RotorMachine::Reflector of type '#{self.reflector_kind_name.to_s}'"
+    end
   end
 end

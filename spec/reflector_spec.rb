@@ -43,6 +43,10 @@ RSpec.describe "RotorMachine::Reflector" do
       expect(@reflector.reflector_kind_name).to be == :REFLECTOR_A
     end
 
+    it "should be able to describe itself" do
+      expect(@reflector.to_s).to be == "a RotorMachine::Reflector of type 'REFLECTOR_A'"
+    end
+
     it "should transpose a character" do
       expect(@reflector.reflect("A")).to be == "E"
     end
