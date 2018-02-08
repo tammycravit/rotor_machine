@@ -62,5 +62,14 @@ module RotorMachine
         @rotors[i].position = c if (i < @rotors.length)
       end
     end
+
+    def to_s
+      buf = "a RotorMachine::Machine with the following configuration:\n"
+      buf += "  Rotors: #{@rotors.count}\n"
+      @rotors.each { |r| buf += "    - #{r.to_s}\n" }
+      buf += "  Reflector: #{@reflector.nil? ? "none" : @reflector.to_s}\n"
+      buf += "  Plugboard: #{@plugboard.nil? ? "none" : @plugboard.to_s}"
+      return buf
+    end
   end
 end
