@@ -26,4 +26,29 @@ require 'spec_helper'
 require 'rotor_machine'
 
 RSpec.describe "RotorMachine::Reflector" do
+  before(:each) do
+    @reflector = RotorMachine::Reflector.new(RotorMachine::Reflector::REFLECTOR_A)
+  end
+
+  context "the preliminaries" do
+    it "should define constants for the standard Enigma reflectors" do
+      [:REFLECTOR_A, :REFLECTOR_B, :REFLECTOR_C, :REFLECTOR_B_THIN, :REFLECTOR_C_THIN, :REFLECTOR_ETW].each do |r|
+        expect(@reflector.class).to be_const_defined(r)
+      end
+    end
+  end
+
+  context "basic functionality" do
+    it "should transpose a character" do
+      expect(@reflector.reflect("A")).to be == "E"
+    end
+
+    it "should allow transposition of a multi-character string" do
+      expect(@reflector.reflect("ABC")).to be == "EJM"
+    end
+
+    it "should pass through characters not defined by the reflector unchanged" do
+      expect(@reflector.reflect("123ABC123")).to be == "123EJM123"
+    end
+  end
 end
