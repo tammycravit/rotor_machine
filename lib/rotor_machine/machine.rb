@@ -188,8 +188,6 @@ module RotorMachine #-nodoc-#
       return buf
     end
 
-    private
-
     ##
     # Encipher a single character. 
     #

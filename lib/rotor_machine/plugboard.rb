@@ -79,7 +79,7 @@ module RotorMachine
     # @param the_string [String] The string being enciphered.
     # @return [String] The enciphered text.
     def transpose(the_string)
-      the_string.upcase.chars.collect { |c| @connections[c] || c }.join("")
+      the_string.chars.collect { |c| @connections[c.upcase] || c.upcase }.join("")
     end
 
     ##
@@ -88,7 +88,7 @@ module RotorMachine
     # @param letter [String] The letter to test.
     # @return True if the letter is connected, nil otherwise.
     def connected?(letter)
-      @connections.keys.upcase.include?(letter)
+      @connections.keys.include?(letter.upcase)
     end
 
     ## 
