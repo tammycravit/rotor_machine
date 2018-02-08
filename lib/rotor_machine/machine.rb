@@ -1,4 +1,4 @@
-module RotorMachine #-nodoc-#
+module RotorMachine 
   ##
   # The {RotorMachine::Machine} class serves as the entrypoint and orchestrator
   # for an Enigma machine.
