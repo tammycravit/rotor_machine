@@ -35,6 +35,7 @@ RSpec.describe "RotorMachine::Rotor" do
       rotor = RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_I)
       expect(rotor.class.name).to be == "RotorMachine::Rotor"
       expect(rotor.rotor_kind).to be == RotorMachine::Rotor::ROTOR_I
+      expect(rotor.rotor_kind_name).to be == :ROTOR_I
       expect(rotor.position).to be == 0
       expect(rotor.step_size).to be == 1
       expect(rotor.current_letter).to be == "J"
@@ -44,6 +45,7 @@ RSpec.describe "RotorMachine::Rotor" do
       rotor = RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_I, 12)
       expect(rotor.class.name).to be == "RotorMachine::Rotor"
       expect(rotor.rotor_kind).to be == RotorMachine::Rotor::ROTOR_I
+      expect(rotor.rotor_kind_name).to be == :ROTOR_I
       expect(rotor.position).to be == 12
       expect(rotor.step_size).to be == 1
       expect(rotor.current_letter).to be == "F"
@@ -53,6 +55,7 @@ RSpec.describe "RotorMachine::Rotor" do
       rotor = RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_I, "F")
       expect(rotor.class.name).to be == "RotorMachine::Rotor"
       expect(rotor.rotor_kind).to be == RotorMachine::Rotor::ROTOR_I
+      expect(rotor.rotor_kind_name).to be == :ROTOR_I
       expect(rotor.position).to be == 12
       expect(rotor.step_size).to be == 1
       expect(rotor.current_letter).to be == "F"
@@ -62,6 +65,7 @@ RSpec.describe "RotorMachine::Rotor" do
       rotor = RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_I, 12, 3)
       expect(rotor.class.name).to be == "RotorMachine::Rotor"
       expect(rotor.rotor_kind).to be == RotorMachine::Rotor::ROTOR_I
+      expect(rotor.rotor_kind_name).to be == :ROTOR_I
       expect(rotor.position).to be == 12
       expect(rotor.step_size).to be == 3
       expect(rotor.current_letter).to be == "F"
@@ -71,6 +75,7 @@ RSpec.describe "RotorMachine::Rotor" do
       rotor = RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_I, "F", 3)
       expect(rotor.class.name).to be == "RotorMachine::Rotor"
       expect(rotor.rotor_kind).to be == RotorMachine::Rotor::ROTOR_I
+      expect(rotor.rotor_kind_name).to be == :ROTOR_I
       expect(rotor.position).to be == 12
       expect(rotor.step_size).to be == 3
       expect(rotor.current_letter).to be == "F"

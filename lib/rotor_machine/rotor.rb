@@ -63,6 +63,11 @@ module RotorMachine
       @letters.join("")
     end
 
+    def rotor_kind_name
+      self.class.constants.each { |k| return k if (self.class.const_get(k) == rotor_kind) }
+      return :CUSTOM
+    end
+
     def wrapped?
       @wrapped
     end
