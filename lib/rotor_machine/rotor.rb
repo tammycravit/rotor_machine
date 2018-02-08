@@ -71,5 +71,9 @@ module RotorMachine
     def wrapped?
       @wrapped
     end
+
+    def to_s
+      return "a RotorMachine::Rotor of type '#{self.rotor_kind_name}', position=#{self.position} (#{self.current_letter}), step_size=#{@step_size}"
+    end
   end
 end

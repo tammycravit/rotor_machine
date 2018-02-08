@@ -156,6 +156,9 @@ RSpec.describe "RotorMachine::Rotor" do
       expect(@rotor.position).to be == 4
     end
 
+    it "should be able to describe itself" do
+      expect(@rotor.to_s).to be == "a RotorMachine::Rotor of type 'ROTOR_I', position=20 (K), step_size=1"
+    end
   end
 
   context "basic operation" do
@@ -170,7 +173,6 @@ RSpec.describe "RotorMachine::Rotor" do
     it "should have symmetric forward and reverse transformations" do
       RotorMachine::Rotor::ALPHABET.chars.each { |c| expect(@rotor.reverse(@rotor.forward(c))).to be == c }
     end
-
 
     it "should pass-through non-alphabetic characters unchanged" do
       "1234567890!@^&*()".chars.each { |c| expect(@rotor.forward(c)).to be == c }
