@@ -112,14 +112,12 @@ RSpec.describe "RotorMachine::Machine" do
     it "should allow you to encrypt text" do
       @machine.set_rotors("ABC")
       ciphertext = @machine.encipher(@plaintext)
-      expect(ciphertext.length).to be == @plaintext.length
       expect(ciphertext).not_to be == @plaintext
     end
 
     it "should allow you to decrypt text by re-encrypting it a second time" do
       @machine.set_rotors("ABC")
       ciphertext = @machine.encipher(@plaintext)
-      expect(ciphertext.length).to be == @plaintext.length
       expect(ciphertext).not_to be == @plaintext
       @machine.set_rotors("ABC")
       new_plaintext = @machine.encipher(ciphertext)
@@ -177,4 +175,9 @@ RSpec.describe "RotorMachine::Machine" do
     end
   end
 
+  context "utility functions" do
+    it "should allow reformatting output to 5-letter blocks" do
+      expect(RotorMachine::Machine.letter_blocks("THIS IS A TEST", 5)).to be == "THISI SATES T"
+    end
+  end
 end

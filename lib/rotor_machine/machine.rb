@@ -217,5 +217,16 @@ module RotorMachine
       self.step_rotors
       ec
     end
+
+    ##
+    # Reformat a string into blocks of letters of uniform size.
+    #
+    # @param the_text [String] The text to reformat.
+    # @param block_size [Numeric] The size of the blocks of letters.
+    # @return [String] The reformatted text.
+    def self.letter_blocks(the_text, block_size)
+      the_text.chars.reject{|s| s.match(/\s/)}.each_slice(block_size).map(&:join).join(" ") 
+    end
+
   end
 end
