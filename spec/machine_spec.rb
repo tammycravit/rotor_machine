@@ -134,4 +134,44 @@ RSpec.describe "RotorMachine::Machine" do
     end
   end
 
+  context "machine setup via factory method" do
+    it "should provide a default machine via the #default_machine class method" do
+      machine = RotorMachine::Machine.default_machine
+
+      expect(machine.rotors.class.name).to be == "Array"
+      expect(machine.rotors.length).to be == 3
+      machine.rotors.each do |r| 
+        expect(r).not_to be_nil
+        expect(r.class.name).to be == "RotorMachine::Rotor"
+      end
+
+      expect(machine.reflector).not_to be_nil
+      expect(machine.reflector.class.name).to be == "RotorMachine::Reflector"
+
+      expect(machine.plugboard).not_to be_nil
+    end
+
+    it "should provide a machine with no rotors or reflector via the #empty_machine class method" do
+      machine = RotorMachine::Machine.empty_machine
+      expect(machine.rotors.class.name).to be == "Array"
+      expect(machine.rotors.length).to be == 0
+      expect(machine.reflector).to be_nil
+      expect(machine.plugboard).not_to be_nil
+    end
+
+    it "should raise an exception if you try to encrypt without loading rotors" do
+      machine = RotorMachine::Machine.empty_machine
+      machine.reflector = RotorMachine::Reflector.new(RotorMachine::Reflector::REFLECTOR_A)
+      expect { machine.encipher("THIS IS A TEST") }.to raise_error(ArgumentError, "Cannot encipher; no rotors loaded")
+    end
+
+    it "should raise an exception if you try to encrypt without loading a reflector" do
+      machine = RotorMachine::Machine.empty_machine
+      machine.rotors << RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_I, "A", 1)
+      machine.rotors << RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_II, "A", 1)
+      machine.rotors << RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_III, "A", 1)
+      expect { machine.encipher("THIS IS A TEST") }.to raise_error(ArgumentError, "Cannot encipher; no reflector loaded")
+    end
+  end
+
 end
