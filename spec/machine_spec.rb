@@ -63,12 +63,7 @@ RSpec.describe "RotorMachine::Machine" do
 
   context "machine stepping" do
     before(:each) do
-      @machine = RotorMachine::Machine.new()
-      @machine.rotors << RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_I, "A", 1)
-      @machine.rotors << RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_II, "A", 1)
-      @machine.rotors << RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_III, "A", 1)
-      @machine.reflector = RotorMachine::Reflector.new(RotorMachine::Reflector::REFLECTOR_A)
-      @machine.plugboard = RotorMachine::Plugboard.new()
+      @machine = RotorMachine::Machine.default_machine()
       @machine.plugboard.connect("A", "F")
       @machine.plugboard.connect("C", "D")
     end
@@ -94,12 +89,7 @@ RSpec.describe "RotorMachine::Machine" do
 
   context "encryption" do
     before(:each) do
-      @machine = RotorMachine::Machine.new()
-      @machine.rotors << RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_I, "A", 1)
-      @machine.rotors << RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_II, "A", 1)
-      @machine.rotors << RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_III, "A", 1)
-      @machine.reflector = RotorMachine::Reflector.new(RotorMachine::Reflector::REFLECTOR_A)
-      @machine.plugboard = RotorMachine::Plugboard.new()
+      @machine = RotorMachine::Machine.default_machine()
       @machine.plugboard.connect("A", "F")
       @machine.plugboard.connect("C", "D")
       
