@@ -73,7 +73,7 @@ visit [https://en.wikipedia.org/wiki/Enigma_machine].
 Here's a visual depiction of the signal path of a single character through
 a (physical) Enigma machine:
 
-![Enigma signal path](https://commons.wikimedia.org/wiki/File:Enigma_wiring_kleur.svg)
+![Enigma signal path](images/File:Enigma_wiring_kleur.svg)
 
 As you can see, the electrical signal from a keypress is routed through the 
 plugboard, then through each of the rotors in sequence
