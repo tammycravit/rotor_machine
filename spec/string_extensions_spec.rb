@@ -32,8 +32,11 @@ RSpec.describe "RotorMachine::StringExtensions" do
   end
 
   context "#in_blocks_of" do
-    it "should allow reformatting output to joined 5-letter blocks by default" do
+    it "should be a method of the String class" do
       expect(@text).to respond_to(:in_blocks_of)
+    end
+
+    it "should allow reformatting output to joined 5-letter blocks by default" do
       expect(@text.in_blocks_of).to be == "THISI SATES TOFIN BLOCK SOF"
     end
 
@@ -53,8 +56,15 @@ RSpec.describe "RotorMachine::StringExtensions" do
   end
 
   context "#in_blocks" do
-    it "should allow reformatting output to joined 5-letter blocks by default" do
+    it "should be a method of the String class" do
       expect(@text).to respond_to(:in_blocks)
+    end
+
+    it "should be an alias for #in_blocks_of" do
+      expect(@text.method(:in_blocks).original_name).to be == :in_blocks_of
+    end
+
+    it "should allow reformatting output to joined 5-letter blocks by default" do
       expect(@text.in_blocks).to be == "THISI SATES TOFIN BLOCK SOF"
     end
   end
