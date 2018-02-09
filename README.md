@@ -70,15 +70,17 @@ visit [https://en.wikipedia.org/wiki/Enigma_machine].
   
 ###  The Signal Path of Letters
   
-On a physical Enigma machine, the electrical signal from a keypress is
-routed through the plugboard, then through each of the rotors in sequence
+Here's a visual depiction of the signal path of a single character through
+a (physical) Enigma machine:
+
+![Enigma signal path](https://commons.wikimedia.org/wiki/File:Enigma_wiring_kleur.svg)
+
+As you can see, the electrical signal from a keypress is routed through the 
+plugboard, then through each of the rotors in sequence
 from left to right. The signal then passes through the reflector (where it
 is transposed again), then back through the rotors in reverse order, and 
 finally back through the plugboard a second time before being displayed on
 the light grid and/or printer.
-
-[https://commons.wikimedia.org/wiki/File:Enigma_wiring_kleur.svg] depicts
-this visually.
   
 One important consequence of this signal path is that encryption and
 decryption are the same operation. That is to say, if you set the rotors
