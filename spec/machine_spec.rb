@@ -25,6 +25,9 @@ require 'rspec'
 require 'spec_helper'
 require 'rotor_machine'
 
+# Extensions to the String class to make testing a bit easier..
+require_helper_named('string_extensions')
+
 RSpec.describe "RotorMachine::Machine" do
   context "normal machine setup" do
     before(:each) do
@@ -121,14 +124,14 @@ RSpec.describe "RotorMachine::Machine" do
       expect(ciphertext).not_to be == @plaintext
       @machine.set_rotors("ABC")
       new_plaintext = @machine.encipher(ciphertext)
-      expect(new_plaintext).to be == @plaintext
+      expect(new_plaintext.strip_whitespace).to be == @plaintext.strip_whitespace
     end
 
     it "should never encrypt a letter to itself" do
       @machine.rotors.each { |r| r.position = 0 }
       plaintext = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" * 100
-      ciphertext = @machine.encipher(plaintext)
-      plaintext = plaintext.chars
+      ciphertext = @machine.encipher(plaintext).strip_whitespace
+      plaintext = plaintext.strip_whitespace.chars
       ciphertext.chars.each_with_index do |c, i|
         expect(plaintext[i]).not_to be == c
       end
