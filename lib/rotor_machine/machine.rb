@@ -140,7 +140,7 @@ module RotorMachine
     def encipher(text)
       raise ArgumentError, "Cannot encipher; no rotors loaded" if (@rotors.count == 0)
       raise ArgumentError, "Cannot encipher; no reflector loaded" if (@reflector.nil?)
-      RotorMachine::Machine.letter_blocks(text.upcase.chars.collect { |c| self.encipher_char(c) }.join(""), 5)
+      text.upcase.chars.collect { |c| self.encipher_char(c) }.join("").in_blocks_of(5)
     end
 
     ##
@@ -219,16 +219,5 @@ module RotorMachine
       end
       ec
     end
-
-    ##
-    # Reformat a string into blocks of letters of uniform size.
-    #
-    # @param the_text [String] The text to reformat.
-    # @param block_size [Numeric] The size of the blocks of letters.
-    # @return [String] The reformatted text.
-    def self.letter_blocks(the_text, block_size)
-      the_text.chars.reject{|s| s.match(/\s/)}.each_slice(block_size).map(&:join).join(" ") 
-    end
-
   end
 end

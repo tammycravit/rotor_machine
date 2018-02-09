@@ -177,10 +177,4 @@ RSpec.describe "RotorMachine::Machine" do
       expect { machine.encipher("THIS IS A TEST") }.to raise_error(ArgumentError, "Cannot encipher; no reflector loaded")
     end
   end
-
-  context "utility functions" do
-    it "should allow reformatting output to 5-letter blocks" do
-      expect(RotorMachine::Machine.letter_blocks("THIS IS A TEST", 5)).to be == "THISI SATES T"
-    end
-  end
 end
