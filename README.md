@@ -1,5 +1,7 @@
 # RotorMachine
 
+![German Enigma machine](https://github.com/tammycravit/rotor_machine/blob/master/images/Bundesarchiv_Enigma.jpg?raw=1)
+
 The `RotorMachine` gem provides a simple Ruby implementation of the 
 [Enigma](https://en.wikipedia.org/wiki/Enigma_machine) rotor encryption machine.
 
@@ -31,26 +33,30 @@ Or install it yourself as:
 
 ## Architecture
 
-The `RotorMachine::Machine` class serves as the entrypoint and orchestrator for an Enigma machine.
+The [`RotorMachine::Machine`](http://www.rubydoc.info/gems/rotor_machine/RotorMachine/Machine) 
+class serves as the entrypoint and orchestrator for an Enigma machine.
   
 ### Components of an Enigma machine
   
-The Enigma machine, as represented by the RotorMachine module, consists
-of the following components:
+The Enigma machine, as represented by the [RotorMachine](http://www.rubydoc.info/gems/rotor_machine) 
+module, consists of the following components:
   
-* One or more rotors, which perform the transposition ciphering and also
-  rotate to produce a polyalphabetic (rather than simple substitution)
-  cipher.
+* One or more [rotors](http://www.rubydoc.info/gems/rotor_machine/RotorMachine/Rotor), which 
+  perform the transposition ciphering and also rotate to produce a polyalphabetic (rather 
+  than simple substitution) cipher.
   
-* A reflector, which performs a simple symmetric substitution of letters
+* A [reflector](http://www.rubydoc.info/gems/rotor_machine/RotorMachine/Reflector), which 
+  performs a simple symmetric substitution of letters
   
-* A plugboard, which allows pairs of letters to be transposed on a
-  per-message basis.
+* A [plugboard](http://www.rubydoc.info/gems/rotor_machine/RotorMachine/Plugboard), which 
+  allows pairs of letters to be transposed on a per-message basis.
   
-On an actual Enigma machine, these components are all electromechanical,
-and the Enigma also included a keyboard, a grid of lights to show the
-results, and in some cases a printer. Since this is a simulated Enigma,
-obviously, no keyboard/printer are supplied here.
+On an actual Enigma machine, these components are all electromechanical, and 
+the Enigma also included a keyboard, a grid of lights to show the results, and 
+in some cases a printer. Since this is a simulated Enigma, obviously, no 
+keyboard/printer are supplied here. In this simulation, the
+[Machine](http://www.rubydoc.info/gems/rotor_machine/RotorMachine/Machine)
+class serves to encapsulate all of these components.
   
 The polyalphabetic encryption of the Enigma comes from the fact that the
 rotors are linked (mechanically in a real Enigma) so that they rotate
@@ -82,7 +88,7 @@ is transposed again), then back through the rotors in reverse order, and
 finally back through the plugboard a second time before being displayed on
 the light grid and/or printer.
   
-One important consequence of this signal path is that encryption and
+The result of the machine's signal path being a loop is that encryption and
 decryption are the same operation. That is to say, if you set the rotors
 and plugboard, and then type your plaintext into the machine, you'll get
 a string of ciphertext. If you then reset the machine to its initial state
@@ -118,12 +124,13 @@ no rotors or reflector.
 require 'rotor_machine'
 
 machine = RotorMachine::Machine.empty_machine
+
 machine.rotors << RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_I, "A", 1)
 machine.rotors << RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_II, "A", 1)
 machine.rotors << RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_III, "A", 1)
 machine.reflector = RotorMachine::Reflector.new(RotorMachine::Reflector::REFLECTOR_A)
-machine.plugboard.connect("A", "M")
-machine.plugboard.connect("Q", "K")
+
+machine.plugboard.connect("A", "M") machine.plugboard.connect("Q", "K")
 
 machine.set_rotors("CFL")
 plaintext = "This is a super secret message".upcase
@@ -156,12 +163,14 @@ To release a new version, update the version number in `version.rb`, and then
 run `bundle exec rake release`, which will create a git tag for the version, 
 push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
-This gem depends on the `tcravit_ruby_lib` gem, which provides Rake tasks to
-update the version number. You can use the `bundle exec rake version:bump:build`,
-`bundle exec version:bump:minor` and `bundle exec rake version:bump:major` tasks
-to increment the parts of the version number. (These tasks rewrite the file
-`lib/rotor_machine/version.rb`). After using them, you'll need to run a
-`git add lib/rotor_machine/version.rb` and `git commit -m "version bump"`.
+This gem depends on the [`tcravit_ruby_lib`](https://github.com/tammycravit/tcravit_ruby_lib) 
+gem, which provides Rake tasks to update the version number. You can use the 
+`bundle exec rake version:bump:build`, `bundle exec version:bump:minor` and 
+`bundle exec rake version:bump:major` tasks to increment the parts of 
+the version number. (These tasks rewrite the file
+[`lib/rotor_machine/version.rb`](https://github.com/tammycravit/rotor_machine/blob/master/lib/rotor_machine/version.rb). 
+After using them, you'll need to run a `git add lib/rotor_machine/version.rb` 
+and `git commit -m "version bump"`.
 
 ## Contributing
 
@@ -186,4 +195,12 @@ The gem is available as open source under the terms of the
 Everyone interacting in the RotorMachine project’s codebases, issue trackers, 
 chat rooms and mailing lists is expected to follow the 
 [code of conduct](https://github.com/tammycravit/rotor_machine/blob/master/CODE_OF_CONDUCT.md).
+
+## Image Credits
+
+* Enigma image - from [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Bundesarchiv_Bild_183-2007-0705-502,_Chiffriermaschine_%22Enigma%22.jpg),
+  provided by Das Bundesarchiv (German Federal Archives).
+
+* Enigma signal path image - from [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Enigma_wiring_kleur.svg), 
+  by [MesserWoland](https://commons.wikimedia.org/wiki/User:MesserWoland)
 
