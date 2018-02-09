@@ -135,9 +135,13 @@ new_plaintext == plaintext                    # => true
 
 ## Documentation
 
-The classes in `rotor_machine/lib/rotor_machine/*.rb` all contain doc comments that 
-pretty exhaustively describe their operation. The RSpec tests in the `spec/` directory
-are also instructive for how the library works and how to use it.
+The classes in 
+[`lib/rotor_machine/*.rb`](https://github.com/tammycravit/rotor_machine/tree/master/lib/rotor_machine) 
+all contain [documentation](http://www.rubydoc.info/gems/rotor_machine/) that 
+pretty exhaustively describe their operation. 
+The [RSpec tests](https://github.com/tammycravit/rotor_machine/tree/master/spec) 
+in the `spec/` directory are also instructive for how the library works 
+and how to use it.
 
 ## Development
 
