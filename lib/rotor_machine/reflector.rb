@@ -15,6 +15,11 @@ module RotorMachine
   class Reflector
 
     ##
+    # Allow querying the numeric position (ie, the initial position) of the
+    # reflector.
+    attr_reader :position
+
+    ##
     # The letter mapping for the German "A" reflector.
     REFLECTOR_A      = "EJMZALYXVBWFCRQUONTSPIKHGD".freeze
 
@@ -39,6 +44,10 @@ module RotorMachine
     REFLECTOR_ETW    = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".freeze
 
     ##
+    # A letter mapping for a passthrough reflector; also used by the RSpec tests
+    ALPHABET        = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".freeze
+
+    ##
     # Initialize a new {Reflector}.
     #
     # @param selected_reflector [String] The character sequqnece for the
@@ -50,8 +59,29 @@ module RotorMachine
     #        an additional permutation factor for the encipherment.
     def initialize(selected_reflector, start_position = 0)
       @letters = selected_reflector.chars.freeze
-      @alphabet = REFLECTOR_ETW.chars.freeze
+      @alphabet = ALPHABET.chars.freeze
       @position = start_position
+    end
+
+    ##
+    # Set the position of the {Rotor}.
+    #
+    # If a numeric position is provided, an {ArgumentError} will be raised if
+    # the position is outside the bounds of the rotor. If an alphabetic position
+    # is provided, an {ArgumentError} will be raised if the supplied character
+    # is not a character represented on the rotor.
+    #
+    # @param pos [Numeric, String] The position of the rotor.
+    def position=(pos)
+      if pos.class.to_s == "String"
+        raise ArgumentError, "#{pos[0]} is not a character on the rotor" unless @letters.include?(pos[0])
+        @position = @letters.index(pos[0])
+      elsif pos.class.to_s == "Integer"
+        raise ArgumentError, "Position #{pos} is invalid" if (pos < 0 or pos > @letters.length)
+        @position = pos
+      else
+        raise ArgumentError, "Invalid argument to position= (#{pos.class.to_s})"
+      end
     end
 
     ##
@@ -65,11 +95,11 @@ module RotorMachine
     # @return [String] The results of passing the input string through the
     #         {Reflector}.
     def reflect(input)
-      input.upcase.chars.each.collect { |c| 
-        if @alphabet.include?(c) then 
-          @letters[(@alphabet.index(c) + @position) % @alphabet.length] 
-        else 
-          c 
+      input.upcase.chars.each.collect { |c|
+        if @alphabet.include?(c) then
+          @letters[(@alphabet.index(c) + @position) % @alphabet.length]
+        else
+          c
         end }.join("")
     end
 
@@ -84,6 +114,14 @@ module RotorMachine
     def reflector_kind_name
       self.class.constants.each { |r| return r if (@letters.join("") == self.class.const_get(r)) }
       return :CUSTOM
+    end
+
+    ##
+    # Get the current letter position of the rotor.
+    #
+    # @return [String] The current letter position of the rotor.
+    def current_letter
+      @letters[self.position]
     end
 
     ##
