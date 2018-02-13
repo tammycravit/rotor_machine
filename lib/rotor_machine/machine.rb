@@ -88,12 +88,10 @@ module RotorMachine
     # - Reflector A
     # - An empty plugboard with no connections
     def self.default_machine
-       machine = self.empty_machine
-       machine.rotors << RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_I, "A", 1)
-       machine.rotors << RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_II, "A", 1)
-       machine.rotors << RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_III, "A", 1)
-       machine.reflector = RotorMachine::Reflector.new(RotorMachine::Reflector::REFLECTOR_A)
-       machine
+      RotorMachine::Factory.build_machine(
+        rotors: RotorMachine::Factory::build_rotor_set([:ROTOR_I, :ROTOR_II, :ROTOR_III], "AAA"),
+        reflector: RotorMachine::Factory::build_reflector(reflector_kind: :REFLECTOR_A)
+      )
     end
 
     ##
@@ -107,11 +105,7 @@ module RotorMachine
     # A RotorMachine in this state will raise an {ArgumentError} until you
     # outfit it with at least one rotor and a reflector.
     def self.empty_machine
-       machine = RotorMachine::Machine.new()
-       machine.rotors = []
-       machine.reflector = nil
-       machine.plugboard = RotorMachine::Plugboard.new()
-       machine
+      RotorMachine::Factory.build_machine()
     end
 
     ##
