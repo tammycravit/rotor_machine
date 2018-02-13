@@ -148,9 +148,16 @@ module RotorMachine
     # The options hash can provide the following options:
     #
     # - `:rotors` - An array of {Rotor} objects. This can be constructed
-    # manually, through multiple calls to {#build_rotor}, or through a single
-    # call to {#build_rotor_set}.
-    # - `:reflector` - A {Reflector object.
+    #   manually, through multiple calls to {#build_rotor}, or through a single
+    #   call to {#build_rotor_set}. Alternatively, you can pass an array of
+    #   symbols which match the constants in the {Rotor} class, and {Rotor}
+    #   objects will be built from those (using default position and step
+    #   sizes).
+    #
+    # - `:reflector` - A {Reflector} object. Alternatively, a symbol
+    #   matching one of the reflector type constants can be passed in, and
+    #   a {Reflector} of the specified type will be created.j
+    #
     # - `:connections` - A {Hash} of connections to make on the new {Machine}'s
     #   {Plugboard}.
     #
@@ -162,8 +169,23 @@ module RotorMachine
       connections = options.fetch(:connections, {})
 
       m = RotorMachine::Machine.new()
-      rotors.each { |r| m.rotors << r }
-      m.reflector = reflector
+      rotors.each do |r|
+        if r.class.name == "RotorMachine::Rotor"
+          m.rotors << r
+        elsif r.class.name == "Symbol"
+          m.rotors << RotorMachine::Factory.build_rotor(rotor_kind: r)
+        end
+      end
+
+      unless reflector.nil?
+        if reflector.class.name == "Symbol"
+          m.reflector = RotorMachine::Factory.build_reflector(reflector_kind: reflector)
+        elsif reflector.class.name == "RotorMachine::Reflector"
+          m.reflector = reflector
+        else
+        end
+      end
+
       m.plugboard = RotorMachine::Plugboard.new()
       unless connections.empty?
         connections.each { |from, to| m.plugboard.connect(from, to) }

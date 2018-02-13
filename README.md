@@ -118,6 +118,9 @@ factory methods whcih set up, respectively, a fully configured machine
 with a default set of rotors and reflector, and an empty machine with
 no rotors or reflector.
 
+You can also create a new `RotorMachine::Machine` (or its various parts)
+using the `RotorMachine::Factory` methods, as shown in the second example.
+
 ## Example
 
 ```ruby
@@ -130,16 +133,35 @@ machine.rotors << RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_II, "A", 1)
 machine.rotors << RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_III, "A", 1)
 machine.reflector = RotorMachine::Reflector.new(RotorMachine::Reflector::REFLECTOR_A)
 
-machine.plugboard.connect("A", "M") machine.plugboard.connect("Q", "K")
+machine.plugboard.connect("A", "M") 
+machine.plugboard.connect("Q", "K")
 
 machine.set_rotors("CFL")
 plaintext = "This is a super secret message".upcase
-ciphertext = machine.encipher(plaintext)      # => "MYGM AO I VVTDI QZXMGY AOGVIRJ"
+ciphertext = machine.encipher(plaintext)      # => "MYGMS ZLTWS AAIDD VTGOC RFKFO"
 
 machine.set_rotors("CFL")
-new_plaintext = machine.encipher(ciphertext)  # => "THIS IS A SUPER SECRET MESSAGE"
+new_plaintext = machine.encipher(ciphertext)  # => "THISI SASUP ERSEC RETME SSAGE"
+```
 
-new_plaintext == plaintext                    # => true
+## Example - Simplified Setup Using the Factory Methods
+
+```ruby
+require 'rotor_machine'
+
+machine = RotorMachine::Factory.build_machine(
+  rotors: [:ROTOR_I, :ROTOR_II, :ROTOR_III],
+  reflector: :REFLECTOR_A,
+  connections: {"A" => "M", "Q" => "K" }
+)
+machine.set_rotors("CFL")
+
+plaintext = "This is a super secret message".upcase
+
+ciphertext = machine.encipher(plaintext)      # => "MYGMS ZLTWS AAIDD VTGOC RFKFO"
+
+machine.set_rotors("CFL")
+new_plaintext = machine.encipher(ciphertext)  # => "THISI SASUP ERSEC RETME SSAGE"
 ```
 
 ## Documentation
