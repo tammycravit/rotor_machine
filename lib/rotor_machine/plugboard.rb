@@ -40,14 +40,12 @@ module RotorMachine
     # @param to [String] A single-character string designating the end
     #        of the connection.
     def connect(from, to)
-      from.upcase!
-      to.upcase!
-      raise ArgumentError, "#{from} is already connected" if (connected?(from))
-      raise ArgumentError, "#{to} is already connected" if (connected?(to))
-      raise ArgumentError, "#{from} cannot be connected to itself" if (to == from)
+      raise ArgumentError, "#{from.upcase} is already connected" if (connected?(from.upcase))
+      raise ArgumentError, "#{to.upcase} is already connected" if (connected?(to.upcase))
+      raise ArgumentError, "#{from.upcase} cannot be connected to itself" if (to.upcase == from.upcase)
 
-      @connections[from] = to
-      @connections[to] = from
+      @connections[from.upcase] = to.upcase
+      @connections[to.upcase] = from.upcase
     end
 
     ##
