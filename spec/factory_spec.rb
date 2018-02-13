@@ -209,22 +209,61 @@ RSpec.describe "RotorMachine::Factory" do
         expect(@m.rotors[1].rotor_kind_name).to be == :ROTOR_II
         expect(@m.rotors[2].rotor_kind_name).to be == :ROTOR_III
         expect(@m.reflector.reflector_kind_name).to be == :REFLECTOR_A
+
+        @m = nil
       end
 
       it "should allow you to construct a machine with an empty rotor set" do
         expect {@m = RotorMachine::Factory.build_machine(reflector: @rf)}.not_to raise_error
         expect(@m.rotors.count).to be == 0
+        @m = nil
       end
 
       it "should allow you to construct a machine with no reflector loaded" do
         expect {@m = RotorMachine::Factory.build_machine(rotors: @rs)}.not_to raise_error
         expect(@m.reflector).to be_nil
+        @m = nil
       end
 
       it "should allow you to construct a machine with plugboard connections specified" do
         expect {@m = RotorMachine::Factory.build_machine(rotors: @rs, reflector: @rf, connections: @cn)}.not_to raise_error
         "AQRY".chars.each { |l| expect(@m.plugboard.connected?(l)).to be_truthy }
+        @m = nil
       end
+
+      it "should allow you to specify rotors and reflectors as symbols" do
+        expect {@m = RotorMachine::Factory.build_machine(
+          rotors: [:ROTOR_I, :ROTOR_II, :ROTOR_III], 
+          reflector: :REFLECTOR_A, 
+          connections: @cn)}.not_to raise_error
+
+        expect(@m).to be_instance_of(RotorMachine::Machine)
+        expect(@m.rotors.count).to be == 3
+        expect(@m.rotors[0]).to be_instance_of(RotorMachine::Rotor)
+        expect(@m.rotors[1]).to be_instance_of(RotorMachine::Rotor)
+        expect(@m.rotors[2]).to be_instance_of(RotorMachine::Rotor)
+        expect(@m.reflector).to be_instance_of(RotorMachine::Reflector)
+        expect(@m.plugboard).to be_instance_of(RotorMachine::Plugboard)
+
+        expect(@m.rotors[0].rotor_kind_name).to be == :ROTOR_I
+        expect(@m.rotors[0].position).to be == 0
+        expect(@m.rotors[0].current_letter).to be == RotorMachine::Rotor::ROTOR_I[0]
+        expect(@m.rotors[0].step_size).to be == 1
+
+        expect(@m.rotors[1].rotor_kind_name).to be == :ROTOR_II
+        expect(@m.rotors[1].position).to be == 0
+        expect(@m.rotors[1].current_letter).to be == RotorMachine::Rotor::ROTOR_II[0]
+        expect(@m.rotors[1].step_size).to be == 1
+        
+        expect(@m.rotors[2].rotor_kind_name).to be == :ROTOR_III
+        expect(@m.rotors[2].position).to be == 0
+        expect(@m.rotors[2].current_letter).to be == RotorMachine::Rotor::ROTOR_III[0]
+        expect(@m.rotors[2].step_size).to be == 1
+
+        expect(@m.reflector.reflector_kind_name).to be == :REFLECTOR_A
+        @m = nil
+      end
+
     end
   end
 end
