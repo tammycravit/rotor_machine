@@ -123,7 +123,7 @@ RSpec.describe "RotorMachine::Factory" do
         expect(@r.position).to be == 7
       end
 
-      it "shoudl raise an error if the position letter is not present on the rotor" do
+      it "should raise an error if the position letter is not present on the rotor" do
         expect {RotorMachine::Factory.build_rotor(rotor_kind: :ROTOR_I, initial_position: "*")}.to raise_error(ArgumentError)
       end
 
@@ -132,6 +132,98 @@ RSpec.describe "RotorMachine::Factory" do
                                                   initial_position: -1)}.to raise_error(ArgumentError)
         expect {RotorMachine::Factory.build_rotor(rotor_kind: :ROTOR_I, 
                                                   initial_position: 38)}.to raise_error(ArgumentError)
+      end
+    end
+
+    context "#build_plugboard" do
+      it "should create a plugboard object" do
+        pb = RotorMachine::Factory.build_plugboard()
+          expect(pb).to be_instance_of(RotorMachine::Plugboard)
+      end
+    end
+
+    context "#build_rotor_set" do
+      it "should allow you to construct a set of rotors" do
+        rs = RotorMachine::Factory.build_rotor_set([:ROTOR_I, :ROTOR_II, "QWERTYUIOPASDFGHJKLZXCVBNM"])
+        expect(rs).to be_instance_of(Array)
+        expect(rs.length).to be == 3
+
+        expect(rs[0]).to be_instance_of(RotorMachine::Rotor)
+        expect(rs[1]).to be_instance_of(RotorMachine::Rotor)
+        expect(rs[2]).to be_instance_of(RotorMachine::Rotor)
+
+        expect(rs[0].rotor_kind_name).to be == :ROTOR_I
+        expect(rs[1].rotor_kind_name).to be == :ROTOR_II
+        expect(rs[2].rotor_kind_name).to be == :CUSTOM
+        expect(rs[2].rotor_kind).to be == "QWERTYUIOPASDFGHJKLZXCVBNM"
+      end
+
+      it "should allow you to specify initial positions" do
+        rs = RotorMachine::Factory.build_rotor_set([:ROTOR_I, :ROTOR_II, :ROTOR_III], "CLP")
+        expect(rs[0].current_letter).to be == "C"
+        expect(rs[0].position).to be == RotorMachine::Rotor::ROTOR_I.index("C")
+        expect(rs[1].current_letter).to be == "L"
+        expect(rs[1].position).to be == RotorMachine::Rotor::ROTOR_II.index("L")
+        expect(rs[2].current_letter).to be == "P"
+        expect(rs[2].position).to be == RotorMachine::Rotor::ROTOR_III.index("P")
+      end
+
+      it "should not raise an error if the initial positions don't specify all rotors" do
+        expect {RotorMachine::Factory.build_rotor_set([:ROTOR_I, :ROTOR_II, :ROTOR_III], "C")}.not_to raise_error
+      end
+
+      it "should not raise an error if the initial positions specify too many rotors" do
+        expect {RotorMachine::Factory.build_rotor_set([:ROTOR_I, :ROTOR_II, :ROTOR_III], "CLFSNFNFHS")}.not_to raise_error
+      end
+    end
+
+    context "#build_machine" do
+      before(:each) do
+        @rs = [
+          RotorMachine::Factory.build_rotor(rotor_kind: :ROTOR_I, initial_position: 0),
+          RotorMachine::Factory.build_rotor(rotor_kind: :ROTOR_II, initial_position: 0),
+          RotorMachine::Factory.build_rotor(rotor_kind: :ROTOR_III, initial_position: 0)
+        ]
+        @rf = RotorMachine::Factory.build_reflector(reflector_kind: :REFLECTOR_A)
+        @cn = {"A" => "Q", "R" => "Y"}
+      end
+
+      after(:each) do
+        @rs = nil
+        @rf = nil
+        @cn = nil
+      end
+
+      it "should allow you to construct a machine with rotors and a reflector" do
+        expect { @m = RotorMachine::Factory.build_machine(rotors: @rs, reflector: @rf) }.not_to raise_error
+
+        expect(@m).to be_instance_of(RotorMachine::Machine)
+        expect(@m.rotors.count).to be == 3
+        expect(@m.rotors[0]).to be_instance_of(RotorMachine::Rotor)
+        expect(@m.rotors[1]).to be_instance_of(RotorMachine::Rotor)
+        expect(@m.rotors[2]).to be_instance_of(RotorMachine::Rotor)
+        expect(@m.reflector).to be_instance_of(RotorMachine::Reflector)
+        expect(@m.plugboard).to be_instance_of(RotorMachine::Plugboard)
+
+        expect(@m.rotors[0].rotor_kind_name).to be == :ROTOR_I
+        expect(@m.rotors[1].rotor_kind_name).to be == :ROTOR_II
+        expect(@m.rotors[2].rotor_kind_name).to be == :ROTOR_III
+        expect(@m.reflector.reflector_kind_name).to be == :REFLECTOR_A
+      end
+
+      it "should allow you to construct a machine with an empty rotor set" do
+        expect {@m = RotorMachine::Factory.build_machine(reflector: @rf)}.not_to raise_error
+        expect(@m.rotors.count).to be == 0
+      end
+
+      it "should allow you to construct a machine with no reflector loaded" do
+        expect {@m = RotorMachine::Factory.build_machine(rotors: @rs)}.not_to raise_error
+        expect(@m.reflector).to be_nil
+      end
+
+      it "should allow you to construct a machine with plugboard connections specified" do
+        expect {@m = RotorMachine::Factory.build_machine(rotors: @rs, reflector: @rf, connections: @cn)}.not_to raise_error
+        "AQRY".chars.each { |l| expect(@m.plugboard.connected?(l)).to be_truthy }
       end
     end
   end
