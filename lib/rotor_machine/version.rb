@@ -1,4 +1,4 @@
 module RotorMachine
-	VERSION_DATA = [1, 0, 11]
+	VERSION_DATA = [1, 0, 12]
 	VERSION = VERSION_DATA.join(".")
 end
