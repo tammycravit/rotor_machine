@@ -1,0 +1,12 @@
+# ~/.tmuxinator/rotor_machine.yml
+
+name: rotor_machine
+root: ~/projects/rotor_machine
+
+windows:
+  - code: vim lib
+  - specs: vim spec
+  - guard: bundle exec guard
+  - pry: bin/console
+  - shell: zsh --login
+
