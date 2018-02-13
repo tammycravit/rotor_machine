@@ -65,5 +65,9 @@ module RotorMachine
 
       return RotorMachine::Reflector.new(reflector_alphabet, initial_position)
     end
+
+    def self.build_plugboard(options={})
+      return RotorMachine::Plugboard.new()
+    end
   end
 end
