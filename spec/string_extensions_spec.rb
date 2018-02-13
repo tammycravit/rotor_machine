@@ -42,6 +42,7 @@ RSpec.describe "RotorMachine::StringExtensions" do
 
     it "should allow reformatting output to a specified block length" do
       expect(@text.in_blocks_of(6)).to be == "THISIS ATESTO FINBLO CKSOF"
+      expect(@text.in_blocks_of(50)).to be == "THISISATESTOFINBLOCKSOF"
     end
 
     it "should allow reformatting output to be returned as an array of chunks" do
