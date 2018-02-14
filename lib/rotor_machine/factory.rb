@@ -122,34 +122,13 @@ module RotorMachine
     end
 
     ##
-    # Build a set of {Rotor}s and return them.
-    #
-    # @param rotors [Array] A list of rotor types. Each type should be either
-    # a symbol corresponding to a constant in the {Rotor} class, or a 26 
-    # character string providing the sequence of letters for the rotor.
-    # @param initial_positions [String] The starting letter to set each rotor
-    # to.
-    # @return [Array] An array of {Rotor} objects.
-    def build_rotor_set(rotors=[], initial_positions=nil)
-      ra = rotors.each.collect { |r| build_rotor(rotor_kind: r) }
-      unless initial_positions.nil?
-        ra.each_with_index do |r, i|
-          unless initial_positions[i].nil?
-            r.position = initial_positions[i] 
-          end
-        end
-      end
-      return ra
-    end
-
-    ##
     # Build a {Machine} and return it.
     #
     # The options hash can provide the following options:
     #
     # - `:rotors` - An array of {Rotor} objects. This can be constructed
-    #   manually, through multiple calls to {#build_rotor}, or through a single
-    #   call to {#build_rotor_set}. Alternatively, you can pass an array of
+    #   manually, or through multiple calls to {#build_rotor}.
+    #   Alternatively, you can pass an array of
     #   symbols which match the constants in the {Rotor} class, and {Rotor}
     #   objects will be built from those (using default position and step
     #   sizes).
@@ -186,7 +165,7 @@ module RotorMachine
         end
       end
 
-      m.plugboard = RotorMachine::Plugboard.new()
+      m.plugboard = build_plugboard()
       unless connections.empty?
         connections.each { |from, to| m.plugboard.connect(from, to) }
       end
@@ -209,9 +188,5 @@ module RotorMachine
     ##
     # {make_machine} is an alias for {build_machine}
     alias :make_machine :build_machine
-
-    ##
-    # {make_rotor_set} is an alias for {build_rotor_set}
-    alias :make_rotor_set :build_rotor_set
   end
 end

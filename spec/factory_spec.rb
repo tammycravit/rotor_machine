@@ -141,34 +141,6 @@ RSpec.describe "RotorMachine::Factory" do
       end
     end
 
-    context "#build_rotor_set" do
-      it "should allow you to construct a set of rotors" do
-        rs = RotorMachine::Factory.build_rotor_set([:ROTOR_I, :ROTOR_II, "QWERTYUIOPASDFGHJKLZXCVBNM"])
-        expect(rs).to be_instance_of(Array)
-        expect(rs.length).to be == 3
-
-        expect(rs[0]).to have_rotor_state(kind: :ROTOR_I, position: 0)
-        expect(rs[1]).to have_rotor_state(kind: :ROTOR_II, position: 0)
-        expect(rs[2]).to have_rotor_state(kind: :CUSTOM, position: 0)
-        expect(rs[2]).to have_rotor_state(kind: "QWERTYUIOPASDFGHJKLZXCVBNM")
-      end
-
-      it "should allow you to specify initial positions" do
-        rs = RotorMachine::Factory.build_rotor_set([:ROTOR_I, :ROTOR_II, :ROTOR_III], "CLP")
-        expect(rs[0]).to have_rotor_state(kind: :ROTOR_I, letter: "C")
-        expect(rs[1]).to have_rotor_state(kind: :ROTOR_II, letter: "L")
-        expect(rs[2]).to have_rotor_state(kind: :ROTOR_III, letter: "P")
-      end
-
-      it "should not raise an error if the initial positions don't specify all rotors" do
-        expect {RotorMachine::Factory.build_rotor_set([:ROTOR_I, :ROTOR_II, :ROTOR_III], "C")}.not_to raise_error
-      end
-
-      it "should not raise an error if the initial positions specify too many rotors" do
-        expect {RotorMachine::Factory.build_rotor_set([:ROTOR_I, :ROTOR_II, :ROTOR_III], "CLFSNFNFHS")}.not_to raise_error
-      end
-    end
-
     context "#build_machine" do
       before(:each) do
         @rs = [
@@ -244,7 +216,7 @@ RSpec.describe "RotorMachine::Factory" do
       end
 
       it "should define make_* aliases for the build_* methods" do
-        ["rotor", "reflector", "plugboard", "machine", "rotor_set"].each do |mn|
+        ["rotor", "reflector", "plugboard", "machine"].each do |mn|
           expect(RotorMachine::Factory).to respond_to("make_#{mn}".to_sym)
           expect(RotorMachine::Factory.method("make_#{mn}".to_sym).original_name.to_s).to be == "build_#{mn}"
         end

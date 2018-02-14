@@ -88,10 +88,12 @@ module RotorMachine
     # - Reflector A
     # - An empty plugboard with no connections
     def self.default_machine
-      RotorMachine::Factory.build_machine(
-        rotors: RotorMachine::Factory::build_rotor_set([:ROTOR_I, :ROTOR_II, :ROTOR_III], "AAA"),
+      m = RotorMachine::Factory.build_machine(
+        rotors: [:ROTOR_I, :ROTOR_II, :ROTOR_III],
         reflector: RotorMachine::Factory::build_reflector(reflector_kind: :REFLECTOR_A)
       )
+      m.set_rotors("AAA")
+      return m
     end
 
     ##
