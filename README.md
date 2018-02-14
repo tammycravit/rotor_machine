@@ -33,29 +33,29 @@ Or install it yourself as:
 
 ## Architecture
 
-The [`RotorMachine::Machine`](http://www.rubydoc.info/gems/rotor_machine/master/RotorMachine/Machine) 
+The [`RotorMachine::Machine`](http://www.rubydoc.info/github/rotor_machine/master/RotorMachine/Machine) 
 class serves as the entrypoint and orchestrator for an Enigma machine.
   
 ### Components of an Enigma machine
   
-The Enigma machine, as represented by the [RotorMachine](http://www.rubydoc.info/gems/rotor_machine/master) 
+The Enigma machine, as represented by the [RotorMachine](http://www.rubydoc.info/github/rotor_machine/master) 
 module, consists of the following components:
   
-* One or more [rotors](http://www.rubydoc.info/gems/rotor_machine/master/RotorMachine/Rotor), which 
+* One or more [rotors](http://www.rubydoc.info/github/rotor_machine/master/RotorMachine/Rotor), which 
   perform the transposition ciphering and also rotate to produce a polyalphabetic (rather 
   than simple substitution) cipher.
   
-* A [reflector](http://www.rubydoc.info/gems/rotor_machine/master/RotorMachine/Reflector), which 
+* A [reflector](http://www.rubydoc.info/github/rotor_machine/master/RotorMachine/Reflector), which 
   performs a simple symmetric substitution of letters
   
-* A [plugboard](http://www.rubydoc.info/gems/rotor_machine/master/RotorMachine/Plugboard), which 
+* A [plugboard](http://www.rubydoc.info/github/rotor_machine/master/RotorMachine/Plugboard), which 
   allows pairs of letters to be transposed on a per-message basis.
   
 On an actual Enigma machine, these components are all electromechanical, and 
 the Enigma also included a keyboard, a grid of lights to show the results, and 
 in some cases a printer. Since this is a simulated Enigma, obviously, no 
 keyboard/printer are supplied here. In this simulation, the
-[Machine](http://www.rubydoc.info/gems/rotor_machine/master/RotorMachine/Machine)
+[Machine](http://www.rubydoc.info/github/rotor_machine/master/RotorMachine/Machine)
 class serves to encapsulate all of these components.
   
 The polyalphabetic encryption of the Enigma comes from the fact that the
@@ -168,7 +168,7 @@ new_plaintext = machine.encipher(ciphertext)  # => "THISI SASUP ERSEC RETME SSAG
 
 The classes in 
 [`lib/rotor_machine/`](https://github.com/tammycravit/rotor_machine/tree/master/lib/rotor_machine) 
-all contain [documentation](http://www.rubydoc.info/gems/rotor_machine/master/) that 
+all contain [documentation](http://www.rubydoc.info/github/rotor_machine/master/) that 
 pretty exhaustively describe their operation. 
 The RSpec tests in the [`spec/`](https://github.com/tammycravit/rotor_machine/tree/master/spec) 
 directory are also instructive for how the library works and how to use it.
