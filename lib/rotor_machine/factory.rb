@@ -12,17 +12,17 @@ module RotorMachine
     # The options hash for this method can accept the following named 
     # arguments:
     #
-    # `:rotor_kind` - The type of rotor to create. Should be a symbol matching
-    #                 a rotor type constant in the {RotorMachine::Rotor} class,
-    #                 or a 26-character string giving the letter sequence for 
-    #                 the rotor. Defaults to `:ROTOR_1` if not specified.
+    # *:rotor_kind* - The type of rotor to create. Should be a symbol matching
+    # a rotor type constant in the {RotorMachine::Rotor} class,
+    # or a 26-character string giving the letter sequence for 
+    # the rotor. Defaults to *:ROTOR_1* if not specified.
     #
-    # `:initial_position` - The initial position of the rotor (0-based
-    #                       numeric position, or a letter on the rotor.) Defaults
-    #                       to 0 if not specified.
+    # *:initial_position* - The initial position of the rotor (0-based
+    # numeric position, or a letter on the rotor.) Defaults
+    # to 0 if not specified.
     #
-    # `:step_size` - How many positions the rotor should advance with each
-    #                step. Defaults to 1 if not specified.
+    # *:step_size* - How many positions the rotor should advance with each
+    # step. Defaults to 1 if not specified.
     #
     # @param options [Hash] The options hash containing the options for the
     #                       rotor.
@@ -69,17 +69,17 @@ module RotorMachine
     # The options hash for this method can accept the following named 
     # arguments:
     #
-    # `:reflector_kind` - The type of reflector to create. Should be a symbol matching
-    #                 a reflector type constant in the {RotorMachine::Reflector} class,
-    #                 or a 26-character string giving the letter sequence for 
-    #                 the reflector. Defaults to `:REFLECTOR_A` if not specified.
+    # *:reflector_kind* - The type of reflector to create. Should be a symbol matching
+    # a reflector type constant in the {RotorMachine::Reflector} class,
+    # or a 26-character string giving the letter sequence for 
+    # the reflector. Defaults to *:REFLECTOR_A* if not specified.
     #
-    # `:initial_position` - The initial position of the reflector (0-based
-    #                       numeric position, or a letter on the rotor.) Defaults
-    #                       to 0 if not specified.
+    # *:initial_position* - The initial position of the reflector (0-based
+    # numeric position, or a letter on the rotor.) Defaults
+    # to 0 if not specified.
     #
     # @param options [Hash] The options hash containing the options for the
-    #                       reflector.
+    # reflector.
     # @return The newly-built reflector.
     def build_reflector(options={})
       reflector_kind     = options.fetch(:reflector_kind,   :REFLECTOR_A)
@@ -126,18 +126,18 @@ module RotorMachine
     #
     # The options hash can provide the following options:
     #
-    # - `:rotors` - An array of {Rotor} objects. This can be constructed
+    # - *:rotors* - An array of {Rotor} objects. This can be constructed
     #   manually, or through multiple calls to {#build_rotor}.
     #   Alternatively, you can pass an array of
     #   symbols which match the constants in the {Rotor} class, and {Rotor}
     #   objects will be built from those (using default position and step
     #   sizes).
     #
-    # - `:reflector` - A {Reflector} object. Alternatively, a symbol
+    # - *:reflector* - A {Reflector} object. Alternatively, a symbol
     #   matching one of the reflector type constants can be passed in, and
     #   a {Reflector} of the specified type will be created.j
     #
-    # - `:connections` - A {Hash} of connections to make on the new {Machine}'s
+    # - *:connections* - A {Hash} of connections to make on the new {Machine}'s
     #   {Plugboard}.
     #
     # @param options The options for the newly built {Machine}.
