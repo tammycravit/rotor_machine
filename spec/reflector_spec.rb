@@ -25,6 +25,8 @@ require 'rspec'
 require 'spec_helper'
 require 'rotor_machine'
 
+require_custom_matcher_named('reflector_state')
+
 RSpec.describe "RotorMachine::Reflector" do
   before(:each) do
     @reflector = RotorMachine::Reflector.new(RotorMachine::Reflector::REFLECTOR_A)
@@ -40,13 +42,44 @@ RSpec.describe "RotorMachine::Reflector" do
 
   context "basic functionality" do
     it "should know what kind of reflector it is" do
-      expect(@reflector.reflector_kind_name).to be == :REFLECTOR_A
+      expect(@reflector).to have_reflector_state(kind: :REFLECTOR_A)
+    end
+
+    it "should know what its position is" do
+      expect(@reflector).to have_reflector_state(position: 0)
+    end
+
+    it "should know what its current letter is" do
+      expect(@reflector).to have_reflector_state(letter: RotorMachine::Reflector::REFLECTOR_A[0])
     end
 
     it "should be able to describe itself" do
       expect(@reflector.to_s).to be == "a RotorMachine::Reflector of type 'REFLECTOR_A'"
     end
+  end
 
+  context "repositioning" do
+    it "should be able to be repositioned to a specific letter" do 
+      @reflector.position = "Q"
+      expect(@reflector).to have_reflector_state(letter: "Q", position: RotorMachine::Reflector::REFLECTOR_A.index("Q"))
+    end
+
+    it "should be able to be repositioned to a specific numeric position" do 
+      @reflector.position = 11
+      expect(@reflector).to have_reflector_state(letter: RotorMachine::Reflector::REFLECTOR_A[11], position: 11)
+    end
+
+    it "should not allow positioning to a letter not on the reflector" do
+      expect {@reflector.position = "*"}.to raise_error(ArgumentError)
+    end
+
+    it "should not allow positioning to a numeric position not on the reflector" do
+      expect {@reflector.position = -10}.to raise_error(ArgumentError)
+      expect {@reflector.position = 45}.to raise_error(ArgumentError)
+    end
+  end
+
+  context "transposition" do
     it "should transpose a character" do
       expect(@reflector.reflect("A")).to be == "E"
     end

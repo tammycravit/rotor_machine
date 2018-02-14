@@ -117,6 +117,14 @@ module RotorMachine
     end
 
     ##
+    # Return the sequence of letters on the reflector.
+    # 
+    # @return [String] The sequence of letters on the reflector.
+    def letters
+      @letters.join("")
+    end
+
+    ##
     # Get the current letter position of the rotor.
     #
     # @return [String] The current letter position of the rotor.

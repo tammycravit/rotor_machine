@@ -25,6 +25,7 @@ require 'spec_helper'
 require 'rotor_machine'
 
 require_custom_matcher_named "rotor_state"
+require_custom_matcher_named "reflector_state"
 
 RSpec.describe "RotorMachine::Factory" do
   context "the preliminaries" do
@@ -40,14 +41,13 @@ RSpec.describe "RotorMachine::Factory" do
     context "specifying reflector alphabet" do
       it "should allow specifying of a reflector constant name" do
         expect {@r = RotorMachine::Factory.build_reflector(reflector_kind: :REFLECTOR_A)}.not_to raise_exception
-        expect(@r).to be_instance_of(RotorMachine::Reflector)
-        expect(@r.reflector_kind_name).to be == :REFLECTOR_A
+        expect(@r).to have_reflector_state(kind: :REFLECTOR_A, position: 0)
       end
 
       it "should allow specifying of a reflector alphabet" do
         expect {@r = RotorMachine::Factory.build_reflector(reflector_kind: "QWERTYUIOPASDFGHJKLZXCVBNM")}.not_to raise_exception
-        expect(@r).to be_instance_of(RotorMachine::Reflector)
-        expect(@r.reflector_kind_name).to be == :CUSTOM
+        expect(@r).to have_reflector_state(kind: "QWERTYUIOPASDFGHJKLZXCVBNM", position: 0)
+        expect(@r).to have_reflector_state(kind: :CUSTOM)
       end
 
       it "should raise an error if the reflector constant name is not defined" do
@@ -63,16 +63,12 @@ RSpec.describe "RotorMachine::Factory" do
     context "specifying initial position" do
       it "should allow specifying the initial position as a character" do
         expect {@r = RotorMachine::Factory.build_reflector(reflector_kind: :REFLECTOR_A, initial_position: "A")}.not_to raise_exception
-        expect(@r).to be_instance_of(RotorMachine::Reflector)
-        expect(@r.current_letter).to be == "A"
-        expect(@r.position).to be == RotorMachine::Reflector::REFLECTOR_A.index("A")
+        expect(@r).to have_reflector_state(kind: :REFLECTOR_A, letter: "A", position: RotorMachine::Reflector::REFLECTOR_A.index("A"))
       end
 
       it "should allow specifying the initial position as a number" do
         expect {@r = RotorMachine::Factory.build_reflector(reflector_kind: :REFLECTOR_A, initial_position: 7)}.not_to raise_exception
-        expect(@r).to be_instance_of(RotorMachine::Reflector)
-        expect(@r.current_letter).to be == RotorMachine::Reflector::REFLECTOR_A[7]
-        expect(@r.position).to be == 7
+        expect(@r).to have_reflector_state(kind: :REFLECTOR_A, position: 7, letter: RotorMachine::Reflector::REFLECTOR_A[7])
       end
 
       it "shoudl raise an error if the position letter is not present on the rotor" do

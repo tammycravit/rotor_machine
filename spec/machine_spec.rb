@@ -30,6 +30,7 @@ require_helper_named('string_extensions')
 
 # Custom matcher to check rotor state
 require_custom_matcher_named("rotor_state")
+require_custom_matcher_named("reflector_state")
 
 RSpec.describe "RotorMachine::Machine" do
   context "normal machine setup" do
@@ -51,8 +52,9 @@ RSpec.describe "RotorMachine::Machine" do
       expect(@machine.rotors[1]).to have_rotor_state(kind: :ROTOR_II, letter: "A", step_size: 1)
       expect(@machine.rotors[2]).to have_rotor_state(kind: :ROTOR_III, letter: "A", step_size: 1)
 
-      expect(@machine.reflector).not_to be_nil
-      expect(@machine.reflector.class.name).to be == "RotorMachine::Reflector"
+      expect(@machine.reflector).to have_reflector_state(kind: :REFLECTOR_A, 
+                                                         position: 0,
+                                                         letter: RotorMachine::Reflector::REFLECTOR_A[0])
 
       expect(@machine.plugboard).not_to be_nil
       expect(@machine.plugboard.class.name).to be == "RotorMachine::Plugboard"
@@ -150,8 +152,9 @@ RSpec.describe "RotorMachine::Machine" do
       expect(machine.rotors[1]).to have_rotor_state(kind: :ROTOR_II, letter: "A", step_size: 1)
       expect(machine.rotors[2]).to have_rotor_state(kind: :ROTOR_III, letter: "A", step_size: 1)
 
-      expect(machine.reflector).not_to be_nil
-      expect(machine.reflector.class.name).to be == "RotorMachine::Reflector"
+      expect(machine.reflector).to have_reflector_state(kind: :REFLECTOR_A, 
+                                                         position: 0,
+                                                         letter: RotorMachine::Reflector::REFLECTOR_A[0])
 
       expect(machine.plugboard).not_to be_nil
     end
