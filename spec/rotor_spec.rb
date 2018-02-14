@@ -24,6 +24,8 @@ require 'rspec'
 require 'spec_helper'
 require 'rotor_machine'
 
+require_custom_matcher_named "rotor_state"
+
 RSpec.describe "RotorMachine::Rotor" do
   
   before(:each) do
@@ -33,52 +35,27 @@ RSpec.describe "RotorMachine::Rotor" do
   context "setup" do
     it "should allow you to create a rotor with a type" do
       rotor = RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_I)
-      expect(rotor.class.name).to be == "RotorMachine::Rotor"
-      expect(rotor.rotor_kind).to be == RotorMachine::Rotor::ROTOR_I
-      expect(rotor.rotor_kind_name).to be == :ROTOR_I
-      expect(rotor.position).to be == 0
-      expect(rotor.step_size).to be == 1
-      expect(rotor.current_letter).to be == "J"
+      expect(rotor).to have_rotor_state(kind: :ROTOR_I, position: 0, letter: "J", step_size: 1)
     end
 
     it "should allow you to create a rotor with a type and numeric position" do
       rotor = RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_I, 12)
-      expect(rotor.class.name).to be == "RotorMachine::Rotor"
-      expect(rotor.rotor_kind).to be == RotorMachine::Rotor::ROTOR_I
-      expect(rotor.rotor_kind_name).to be == :ROTOR_I
-      expect(rotor.position).to be == 12
-      expect(rotor.step_size).to be == 1
-      expect(rotor.current_letter).to be == "F"
+      expect(rotor).to have_rotor_state(kind: :ROTOR_I, position: 12, letter: "F", step_size: 1)
     end
 
     it "should allow you to create a rotor with a type and character position" do
       rotor = RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_I, "F")
-      expect(rotor.class.name).to be == "RotorMachine::Rotor"
-      expect(rotor.rotor_kind).to be == RotorMachine::Rotor::ROTOR_I
-      expect(rotor.rotor_kind_name).to be == :ROTOR_I
-      expect(rotor.position).to be == 12
-      expect(rotor.step_size).to be == 1
-      expect(rotor.current_letter).to be == "F"
+      expect(rotor).to have_rotor_state(kind: :ROTOR_I, position: 12, letter: "F", step_size: 1)
     end
 
     it "should allow you to create a rotor with a type, numeric position, and stepping" do
       rotor = RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_I, 12, 3)
-      expect(rotor.class.name).to be == "RotorMachine::Rotor"
-      expect(rotor.rotor_kind).to be == RotorMachine::Rotor::ROTOR_I
-      expect(rotor.rotor_kind_name).to be == :ROTOR_I
-      expect(rotor.position).to be == 12
-      expect(rotor.step_size).to be == 3
-      expect(rotor.current_letter).to be == "F"
+      expect(rotor).to have_rotor_state(kind: :ROTOR_I, position: 12, letter: "F", step_size: 3)
     end
 
     it "should allow you to create a rotor with a type, character position, and stepping" do
       rotor = RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_I, "F", 3)
-      expect(rotor.class.name).to be == "RotorMachine::Rotor"
-      expect(rotor.rotor_kind).to be == RotorMachine::Rotor::ROTOR_I
-      expect(rotor.rotor_kind_name).to be == :ROTOR_I
-      expect(rotor.position).to be == 12
-      expect(rotor.step_size).to be == 3
-      expect(rotor.current_letter).to be == "F"
+      expect(rotor).to have_rotor_state(kind: :ROTOR_I, position: 12, letter: "F", step_size: 3)
     end
 
     it "should raise an exception if you try to create a rotor with no type" do
@@ -194,5 +171,4 @@ RSpec.describe "RotorMachine::Rotor" do
       expect{@rotor.position = []}.to raise_error(ArgumentError, "Invalid argument to position= (Array)") 
     end
   end
-
 end

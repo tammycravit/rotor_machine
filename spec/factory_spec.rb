@@ -24,6 +24,8 @@ require 'rspec'
 require 'spec_helper'
 require 'rotor_machine'
 
+require_custom_matcher_named "rotor_state"
+
 RSpec.describe "RotorMachine::Factory" do
   context "the preliminaries" do
     it "should provide factory method for building Enigma components" do
@@ -90,14 +92,13 @@ RSpec.describe "RotorMachine::Factory" do
     context "specifying rotor alphabet" do
       it "should allow specifying of a rotor constant name" do
         expect {@r = RotorMachine::Factory.build_rotor(rotor_kind: :ROTOR_I)}.not_to raise_exception
-        expect(@r).to be_instance_of(RotorMachine::Rotor)
-        expect(@r.rotor_kind_name).to be == :ROTOR_I
+        expect(@r).to have_rotor_state(kind: :ROTOR_I)
       end
 
       it "should allow specifying of a rotor alphabet" do
         expect {@r = RotorMachine::Factory.build_rotor(rotor_kind: "QWERTYUIOPASDFGHJKLZXCVBNM")}.not_to raise_exception
-        expect(@r).to be_instance_of(RotorMachine::Rotor)
-        expect(@r.rotor_kind_name).to be == :CUSTOM
+        expect(@r).to have_rotor_state(kind: :CUSTOM)
+        expect(@r).to have_rotor_state(kind: "QWERTYUIOPASDFGHJKLZXCVBNM")
       end
 
       it "should raise an error if the rotor constant name is not defined" do
@@ -113,16 +114,16 @@ RSpec.describe "RotorMachine::Factory" do
     context "specifying initial position" do
       it "should allow specifying the initial position as a character" do
         expect {@r = RotorMachine::Factory.build_rotor(rotor_kind: :ROTOR_I, initial_position: "A")}.not_to raise_exception
-        expect(@r).to be_instance_of(RotorMachine::Rotor)
-        expect(@r.current_letter).to be == "A"
-        expect(@r.position).to be == RotorMachine::Rotor::ROTOR_I.index("A")
+        expect(@r).to have_rotor_state(kind: :ROTOR_I, 
+                                       letter: "A", 
+                                       position: RotorMachine::Rotor::ROTOR_I.index("A"))
       end
 
       it "should allow specifying the initial position as a number" do
         expect {@r = RotorMachine::Factory.build_rotor(rotor_kind: :ROTOR_I, initial_position: 7)}.not_to raise_exception
-        expect(@r).to be_instance_of(RotorMachine::Rotor)
-        expect(@r.current_letter).to be == RotorMachine::Rotor::ROTOR_I[7]
-        expect(@r.position).to be == 7
+        expect(@r).to have_rotor_state(kind: :ROTOR_I, 
+                                       letter: RotorMachine::Rotor::ROTOR_I[7],
+                                       position: 7)
       end
 
       it "should raise an error if the position letter is not present on the rotor" do
@@ -150,24 +151,17 @@ RSpec.describe "RotorMachine::Factory" do
         expect(rs).to be_instance_of(Array)
         expect(rs.length).to be == 3
 
-        expect(rs[0]).to be_instance_of(RotorMachine::Rotor)
-        expect(rs[1]).to be_instance_of(RotorMachine::Rotor)
-        expect(rs[2]).to be_instance_of(RotorMachine::Rotor)
-
-        expect(rs[0].rotor_kind_name).to be == :ROTOR_I
-        expect(rs[1].rotor_kind_name).to be == :ROTOR_II
-        expect(rs[2].rotor_kind_name).to be == :CUSTOM
-        expect(rs[2].rotor_kind).to be == "QWERTYUIOPASDFGHJKLZXCVBNM"
+        expect(rs[0]).to have_rotor_state(kind: :ROTOR_I, position: 0)
+        expect(rs[1]).to have_rotor_state(kind: :ROTOR_II, position: 0)
+        expect(rs[2]).to have_rotor_state(kind: :CUSTOM, position: 0)
+        expect(rs[2]).to have_rotor_state(kind: "QWERTYUIOPASDFGHJKLZXCVBNM")
       end
 
       it "should allow you to specify initial positions" do
         rs = RotorMachine::Factory.build_rotor_set([:ROTOR_I, :ROTOR_II, :ROTOR_III], "CLP")
-        expect(rs[0].current_letter).to be == "C"
-        expect(rs[0].position).to be == RotorMachine::Rotor::ROTOR_I.index("C")
-        expect(rs[1].current_letter).to be == "L"
-        expect(rs[1].position).to be == RotorMachine::Rotor::ROTOR_II.index("L")
-        expect(rs[2].current_letter).to be == "P"
-        expect(rs[2].position).to be == RotorMachine::Rotor::ROTOR_III.index("P")
+        expect(rs[0]).to have_rotor_state(kind: :ROTOR_I, letter: "C")
+        expect(rs[1]).to have_rotor_state(kind: :ROTOR_II, letter: "L")
+        expect(rs[2]).to have_rotor_state(kind: :ROTOR_III, letter: "P")
       end
 
       it "should not raise an error if the initial positions don't specify all rotors" do
@@ -203,15 +197,12 @@ RSpec.describe "RotorMachine::Factory" do
 
         expect(@m).to be_instance_of(RotorMachine::Machine)
         expect(@m.rotors.count).to be == 3
-        expect(@m.rotors[0]).to be_instance_of(RotorMachine::Rotor)
-        expect(@m.rotors[1]).to be_instance_of(RotorMachine::Rotor)
-        expect(@m.rotors[2]).to be_instance_of(RotorMachine::Rotor)
+        expect(@m.rotors[0]).to have_rotor_state(kind: :ROTOR_I, position: 0)
+        expect(@m.rotors[1]).to have_rotor_state(kind: :ROTOR_II, position: 0)
+        expect(@m.rotors[2]).to have_rotor_state(kind: :ROTOR_III, position: 0)
         expect(@m.reflector).to be_instance_of(RotorMachine::Reflector)
         expect(@m.plugboard).to be_instance_of(RotorMachine::Plugboard)
 
-        expect(@m.rotors[0].rotor_kind_name).to be == :ROTOR_I
-        expect(@m.rotors[1].rotor_kind_name).to be == :ROTOR_II
-        expect(@m.rotors[2].rotor_kind_name).to be == :ROTOR_III
         expect(@m.reflector.reflector_kind_name).to be == :REFLECTOR_A
       end
 
@@ -238,26 +229,20 @@ RSpec.describe "RotorMachine::Factory" do
 
         expect(@m).to be_instance_of(RotorMachine::Machine)
         expect(@m.rotors.count).to be == 3
-        expect(@m.rotors[0]).to be_instance_of(RotorMachine::Rotor)
-        expect(@m.rotors[1]).to be_instance_of(RotorMachine::Rotor)
-        expect(@m.rotors[2]).to be_instance_of(RotorMachine::Rotor)
+        expect(@m.rotors[0]).to have_rotor_state(kind: :ROTOR_I, 
+                                                 position: 0,
+                                                 letter: RotorMachine::Rotor::ROTOR_I[0],
+                                                 step_size: 1)
+        expect(@m.rotors[1]).to have_rotor_state(kind: :ROTOR_II, 
+                                                 position: 0,
+                                                 letter: RotorMachine::Rotor::ROTOR_II[0],
+                                                 step_size: 1)
+        expect(@m.rotors[2]).to have_rotor_state(kind: :ROTOR_III, 
+                                                 position: 0,
+                                                 letter: RotorMachine::Rotor::ROTOR_III[0],
+                                                 step_size: 1)
         expect(@m.reflector).to be_instance_of(RotorMachine::Reflector)
         expect(@m.plugboard).to be_instance_of(RotorMachine::Plugboard)
-
-        expect(@m.rotors[0].rotor_kind_name).to be == :ROTOR_I
-        expect(@m.rotors[0].position).to be == 0
-        expect(@m.rotors[0].current_letter).to be == RotorMachine::Rotor::ROTOR_I[0]
-        expect(@m.rotors[0].step_size).to be == 1
-
-        expect(@m.rotors[1].rotor_kind_name).to be == :ROTOR_II
-        expect(@m.rotors[1].position).to be == 0
-        expect(@m.rotors[1].current_letter).to be == RotorMachine::Rotor::ROTOR_II[0]
-        expect(@m.rotors[1].step_size).to be == 1
-        
-        expect(@m.rotors[2].rotor_kind_name).to be == :ROTOR_III
-        expect(@m.rotors[2].position).to be == 0
-        expect(@m.rotors[2].current_letter).to be == RotorMachine::Rotor::ROTOR_III[0]
-        expect(@m.rotors[2].step_size).to be == 1
 
         expect(@m.reflector.reflector_kind_name).to be == :REFLECTOR_A
       end

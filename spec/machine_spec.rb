@@ -28,6 +28,9 @@ require 'rotor_machine'
 # Extensions to the String class to make testing a bit easier..
 require_helper_named('string_extensions')
 
+# Custom matcher to check rotor state
+require_custom_matcher_named("rotor_state")
+
 RSpec.describe "RotorMachine::Machine" do
   context "normal machine setup" do
     before(:each) do
@@ -44,10 +47,9 @@ RSpec.describe "RotorMachine::Machine" do
     it "should allow manual setup of the machine" do
       expect(@machine.rotors.class.name).to be == "Array"
       expect(@machine.rotors.length).to be == 3
-      @machine.rotors.each do |r| 
-        expect(r).not_to be_nil
-        expect(r.class.name).to be == "RotorMachine::Rotor"
-      end
+      expect(@machine.rotors[0]).to have_rotor_state(kind: :ROTOR_I, letter: "A", step_size: 1)
+      expect(@machine.rotors[1]).to have_rotor_state(kind: :ROTOR_II, letter: "A", step_size: 1)
+      expect(@machine.rotors[2]).to have_rotor_state(kind: :ROTOR_III, letter: "A", step_size: 1)
 
       expect(@machine.reflector).not_to be_nil
       expect(@machine.reflector.class.name).to be == "RotorMachine::Reflector"
@@ -58,9 +60,9 @@ RSpec.describe "RotorMachine::Machine" do
 
     it "should allow you to set the rotor positions as a group" do
       @machine.set_rotors("ABC")
-      expect(@machine.rotors[0].current_letter).to be == "A"
-      expect(@machine.rotors[1].current_letter).to be == "B"
-      expect(@machine.rotors[2].current_letter).to be == "C"
+      expect(@machine.rotors[0]).to have_rotor_state(letter: "A")
+      expect(@machine.rotors[1]).to have_rotor_state(letter: "B")
+      expect(@machine.rotors[2]).to have_rotor_state(letter: "C")
     end
 
     it "should know how to describe itself" do
@@ -88,8 +90,8 @@ RSpec.describe "RotorMachine::Machine" do
       @machine.rotors[1].position = 18
       @machine.rotors[2].position = 25
       @machine.step_rotors
-      expect(@machine.rotors[2].position).to be == 0
-      expect(@machine.rotors[1].position).to be == 19
+      expect(@machine.rotors[2]).to have_rotor_state(position: 0)
+      expect(@machine.rotors[1]).to have_rotor_state(position: 19)
     end
 
     it "should step the first rotor by one position when the second rotor wraps around" do
@@ -97,9 +99,9 @@ RSpec.describe "RotorMachine::Machine" do
       @machine.rotors[1].position = 25
       curr_r1_p = @machine.rotors[0].position
       @machine.step_rotors
-      expect(@machine.rotors[2].position).to be == 0
-      expect(@machine.rotors[1].position).to be == 0
-      expect(@machine.rotors[0].position).to be == (curr_r1_p + 1)
+      expect(@machine.rotors[2]).to have_rotor_state(position: 0)
+      expect(@machine.rotors[1]).to have_rotor_state(position: 0)
+      expect(@machine.rotors[0]).to have_rotor_state(position: (curr_r1_p + 1))
     end
   end
 
@@ -144,10 +146,9 @@ RSpec.describe "RotorMachine::Machine" do
 
       expect(machine.rotors.class.name).to be == "Array"
       expect(machine.rotors.length).to be == 3
-      machine.rotors.each do |r| 
-        expect(r).not_to be_nil
-        expect(r.class.name).to be == "RotorMachine::Rotor"
-      end
+      expect(machine.rotors[0]).to have_rotor_state(kind: :ROTOR_I, letter: "A", step_size: 1)
+      expect(machine.rotors[1]).to have_rotor_state(kind: :ROTOR_II, letter: "A", step_size: 1)
+      expect(machine.rotors[2]).to have_rotor_state(kind: :ROTOR_III, letter: "A", step_size: 1)
 
       expect(machine.reflector).not_to be_nil
       expect(machine.reflector.class.name).to be == "RotorMachine::Reflector"
