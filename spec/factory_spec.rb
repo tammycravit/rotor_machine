@@ -264,6 +264,13 @@ RSpec.describe "RotorMachine::Factory" do
         @m = nil
       end
 
+      it "should define make_* aliases for the build_* methods" do
+        ["rotor", "reflector", "plugboard", "machine", "rotor_set"].each do |mn|
+          expect(RotorMachine::Factory).to respond_to("make_#{mn}".to_sym)
+          expect(RotorMachine::Factory.method("make_#{mn}".to_sym).original_name.to_s).to be == "build_#{mn}"
+        end
+      end
+
     end
   end
 end
