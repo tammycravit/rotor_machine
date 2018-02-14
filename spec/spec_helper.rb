@@ -1,5 +1,8 @@
 require 'simplecov'
-SimpleCov.start
+SimpleCov.start do
+  add_group "Library", "lib"
+  add_group "Tests",   "spec" 
+end
 
 require "bundler/setup"
 require "rotor_machine"
