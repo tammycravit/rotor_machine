@@ -72,7 +72,7 @@ have position "AAZ", their state after the next character is typed will
 be "ABA".
   
 To learn much more about the inner workings of actual Enigma machines,
-visit [https://en.wikipedia.org/wiki/Enigma_machine].
+visit [Enigma Machine (Wikipedia)](https://en.wikipedia.org/wiki/Enigma_machine).
   
 ###  The Signal Path of Letters
   
@@ -82,11 +82,11 @@ a (physical) Enigma machine:
 ![Enigma signal path](https://github.com/tammycravit/rotor_machine/blob/master/images/File:Enigma_wiring_kleur.png?raw=1)
 
 As you can see, the electrical signal from a keypress is routed through the 
-plugboard, then through each of the rotors in sequence
-from left to right. The signal then passes through the reflector (where it
-is transposed again), then back through the rotors in reverse order, and 
-finally back through the plugboard a second time before being displayed on
-the light grid and/or printer.
+plugboard, then through each of the rotors in sequence from left to right. 
+The signal then passes through the reflector (where it is transposed again), 
+then back through the rotors in reverse order, and finally back through the 
+plugboard a second time before being displayed on the light grid and/or 
+printer.
   
 The result of the machine's signal path being a loop is that encryption and
 decryption are the same operation. That is to say, if you set the rotors
@@ -95,9 +95,10 @@ a string of ciphertext. If you then reset the machine to its initial state
 and type the ciphertext characters into the machine, you'll produce your
 original plaintext.
   
-One consequence of the Enigma's design is that a plaintext letter will
-never encipher to itself. The Allies were able to exploit this property
-to help break the Enigma's encryption in World War II.
+One consequence of the Enigma's design is that a plaintext letter will never 
+encipher to itself. The Allies were able to exploit this property to help 
+[break the Enigma's encryption](https://en.wikipedia.org/wiki/Cryptanalysis_of_the_Enigma) 
+during World War II.
   
 ## Usage
 
@@ -144,7 +145,7 @@ machine.set_rotors("CFL")
 new_plaintext = machine.encipher(ciphertext)  # => "THISI SASUP ERSEC RETME SSAGE"
 ```
 
-## Example - Simplified Setup Using the Factory Methods
+## Example - Simplified Setup Using the Factory 
 
 ```ruby
 require 'rotor_machine'
@@ -157,7 +158,6 @@ machine = RotorMachine::Factory.build_machine(
 machine.set_rotors("CFL")
 
 plaintext = "This is a super secret message".upcase
-
 ciphertext = machine.encipher(plaintext)      # => "MYGMS ZLTWS AAIDD VTGOC RFKFO"
 
 machine.set_rotors("CFL")
@@ -194,7 +194,7 @@ the version number. (These tasks rewrite the file
 After using them, you'll need to run a `git add lib/rotor_machine/version.rb` 
 and `git commit -m "version bump"`.
 
-## Contributing
+### Contributing
 
 Bug reports and pull requests are welcome on GitHub at 
 [https://github.com/tammycravit/rotor_machine]. Pull requests for code changes 
@@ -207,16 +207,16 @@ contributors are expected to adhere to the
 Contributions from people who identify as women, BIPOC folx, LGBT folx, 
 and members of other marginalized communities are especially welcomed.
 
-## License
-
-The gem is available as open source under the terms of the 
-[Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) license.
-
-## Code of Conduct
+### Code of Conduct
 
 Everyone interacting in the RotorMachine project’s codebases, issue trackers, 
 chat rooms and mailing lists is expected to follow the 
 [code of conduct](https://github.com/tammycravit/rotor_machine/blob/master/CODE_OF_CONDUCT.md).
+
+## License
+
+The gem is available as open source under the terms of the 
+[Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) license.
 
 ## Image Credits
 
