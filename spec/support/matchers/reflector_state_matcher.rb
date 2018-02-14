@@ -21,6 +21,27 @@
 
 require 'rspec/expectations'
 
+##
+# The Reflector state matcher can be used to validate the state of a {Reflector}
+# object. It accepts an options hash specifying the attributes to validate,
+# which can include any or all of the following:
+#
+# - `kind`: This can either be a symbol representing one of the reflector
+#   type constants (or :CUSTOM) or a string representing the sequence of
+#   letters on the reflector. Because you might want to check the sequence
+#   of letters on a standard reflector, passing in a string does *not* assume
+#   a reflector type of :CUSTOM; you'll need to make a separate check for this
+#   if desired.
+#   
+# - `position`: Checks that the numeric position of the reflector matches the
+#   provided value.
+#
+# - `letter`: Checks that the currently selected letter on the Reflector 
+#   matches the provided value.
+#
+# In addition whichever options are specified, the matcher also validates that
+# the provided object is non-nil and is an instance of a 
+# {RotorMachine::Reflector}
 RSpec::Matchers.define :have_reflector_state do |options|
   match do |the_reflector|
     @errors = []
@@ -45,7 +66,7 @@ RSpec::Matchers.define :have_reflector_state do |options|
         end
       elsif desired_kind.class.name == "String"
         unless the_reflector.letters == desired_kind
-          @errors.push "expected reflector kind #{desired_kind}; got #{the_reflector.letters}"
+          @errors.push "expected reflector letters #{desired_kind}; got #{the_reflector.letters}"
         end
       else
         @errors.push "expected desired reflector kind to be a Symbol or String; got #{desired_kind.class.name}"

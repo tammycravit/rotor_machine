@@ -21,6 +21,29 @@
 
 require 'rspec/expectations'
 
+##
+# The Rotor state matcher can be used to validate the state of a {Rotor}
+# object. It accepts an options hash specifying the attributes to validate,
+# which can include any or all of the following:
+#
+# - `kind`: This can either be a symbol representing one of the rotor
+#   type constants (or :CUSTOM) or a string representing the sequence of
+#   letters on the rotor. Because you might want to check the sequence
+#   of letters on a standard rotor, passing in a string does *not* assume
+#   a rotor type of :CUSTOM; you'll need to make a separate check for this
+#   if desired.
+#   
+# - `position`: Checks that the numeric position of the rotor matches the
+#   provided value.
+#
+# - `letter`: Checks that the currently selected letter on the rotor 
+#   matches the provided value.
+#
+# - `step_size`: Checks that the rotor's current step size matches the
+#   provided value.
+#
+# In addition whichever options are specified, the matcher also validates that
+# the provided object is non-nil and is an instance of a {RotorMachine::Rotor}
 RSpec::Matchers.define :have_rotor_state do |options|
   match do |the_rotor|
     @errors = []
