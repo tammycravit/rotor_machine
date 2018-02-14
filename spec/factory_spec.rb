@@ -63,6 +63,7 @@ RSpec.describe "RotorMachine::Factory" do
         expect {@r = RotorMachine::Factory.build_reflector(reflector_kind: :REFLECTOR_A, initial_position: "A")}.not_to raise_exception
         expect(@r).to be_instance_of(RotorMachine::Reflector)
         expect(@r.current_letter).to be == "A"
+        expect(@r.position).to be == RotorMachine::Reflector::REFLECTOR_A.index("A")
       end
 
       it "should allow specifying the initial position as a number" do
@@ -114,6 +115,7 @@ RSpec.describe "RotorMachine::Factory" do
         expect {@r = RotorMachine::Factory.build_rotor(rotor_kind: :ROTOR_I, initial_position: "A")}.not_to raise_exception
         expect(@r).to be_instance_of(RotorMachine::Rotor)
         expect(@r.current_letter).to be == "A"
+        expect(@r.position).to be == RotorMachine::Rotor::ROTOR_I.index("A")
       end
 
       it "should allow specifying the initial position as a number" do
@@ -138,7 +140,7 @@ RSpec.describe "RotorMachine::Factory" do
     context "#build_plugboard" do
       it "should create a plugboard object" do
         pb = RotorMachine::Factory.build_plugboard()
-          expect(pb).to be_instance_of(RotorMachine::Plugboard)
+        expect(pb).to be_instance_of(RotorMachine::Plugboard)
       end
     end
 
@@ -186,12 +188,14 @@ RSpec.describe "RotorMachine::Factory" do
         ]
         @rf = RotorMachine::Factory.build_reflector(reflector_kind: :REFLECTOR_A)
         @cn = {"A" => "Q", "R" => "Y"}
+        @m = nil
       end
 
       after(:each) do
         @rs = nil
         @rf = nil
         @cn = nil
+        @m = nil
       end
 
       it "should allow you to construct a machine with rotors and a reflector" do
@@ -209,26 +213,21 @@ RSpec.describe "RotorMachine::Factory" do
         expect(@m.rotors[1].rotor_kind_name).to be == :ROTOR_II
         expect(@m.rotors[2].rotor_kind_name).to be == :ROTOR_III
         expect(@m.reflector.reflector_kind_name).to be == :REFLECTOR_A
-
-        @m = nil
       end
 
       it "should allow you to construct a machine with an empty rotor set" do
         expect {@m = RotorMachine::Factory.build_machine(reflector: @rf)}.not_to raise_error
         expect(@m.rotors.count).to be == 0
-        @m = nil
       end
 
       it "should allow you to construct a machine with no reflector loaded" do
         expect {@m = RotorMachine::Factory.build_machine(rotors: @rs)}.not_to raise_error
         expect(@m.reflector).to be_nil
-        @m = nil
       end
 
       it "should allow you to construct a machine with plugboard connections specified" do
         expect {@m = RotorMachine::Factory.build_machine(rotors: @rs, reflector: @rf, connections: @cn)}.not_to raise_error
         "AQRY".chars.each { |l| expect(@m.plugboard.connected?(l)).to be_truthy }
-        @m = nil
       end
 
       it "should allow you to specify rotors and reflectors as symbols" do
@@ -261,7 +260,6 @@ RSpec.describe "RotorMachine::Factory" do
         expect(@m.rotors[2].step_size).to be == 1
 
         expect(@m.reflector.reflector_kind_name).to be == :REFLECTOR_A
-        @m = nil
       end
 
       it "should define make_* aliases for the build_* methods" do
@@ -270,7 +268,6 @@ RSpec.describe "RotorMachine::Factory" do
           expect(RotorMachine::Factory.method("make_#{mn}".to_sym).original_name.to_s).to be == "build_#{mn}"
         end
       end
-
     end
   end
 end
