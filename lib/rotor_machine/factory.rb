@@ -9,12 +9,12 @@ module RotorMachine
     ##
     # Build a new {Rotor} and return it.
     #
-    # The options hash for this method can accept the following named 
+    # The options hash for this method can accept the following named
     # arguments:
     #
     # *:rotor_kind* - The type of rotor to create. Should be a symbol matching
     # a rotor type constant in the {RotorMachine::Rotor} class,
-    # or a 26-character string giving the letter sequence for 
+    # or a 26-character string giving the letter sequence for
     # the rotor. Defaults to *:ROTOR_1* if not specified.
     #
     # *:initial_position* - The initial position of the rotor (0-based
@@ -28,16 +28,19 @@ module RotorMachine
     #                       rotor.
     # @return The newly-built rotor.
     def build_rotor(options={})
-      rotor_kind         = options.fetch(:rotor_kind,         :ROTOR_I)
+      rotor_kind         = options.fetch(:rotor_kind, nil)
       initial_position   = options.fetch(:initial_position,   0)
       step_size          = options.fetch(:step_size,          1)
 
       rotor_alphabet = nil
+      if rotor_kind.nil?
+        raise ArgumentError, "Rotor kind not specified"
+      end
 
-      if (rotor_kind.class.name == "Symbol")
+      if rotor_kind.is_a? Symbol
         raise ArgumentError, "Invalid rotor kind (symbol #{rotor_kind} not found)" unless RotorMachine::Rotor.constants.include?(rotor_kind)
         rotor_alphabet = RotorMachine::Rotor.const_get(rotor_kind)
-      elsif (rotor_kind.class.name == "String")
+      elsif rotor_kind.is_a? String
         raise ArgumentError, "Invalid rotor kind (invalid length)" unless rotor_kind.length == 26
         rotor_alphabet = rotor_kind.upcase
       else
@@ -66,12 +69,12 @@ module RotorMachine
     ##
     # Build a new {Reflector} and return it.
     #
-    # The options hash for this method can accept the following named 
+    # The options hash for this method can accept the following named
     # arguments:
     #
     # *:reflector_kind* - The type of reflector to create. Should be a symbol matching
     # a reflector type constant in the {RotorMachine::Reflector} class,
-    # or a 26-character string giving the letter sequence for 
+    # or a 26-character string giving the letter sequence for
     # the reflector. Defaults to *:REFLECTOR_A* if not specified.
     #
     # *:initial_position* - The initial position of the reflector (0-based
@@ -82,21 +85,27 @@ module RotorMachine
     # reflector.
     # @return The newly-built reflector.
     def build_reflector(options={})
-      reflector_kind     = options.fetch(:reflector_kind,   :REFLECTOR_A)
-      initial_position   = options.fetch(:initial_position, 0)
+      reflector_kind     = options.fetch(:reflector_kind, nil)
+      initial_position   = options.fetch(:initial_position, nil)
 
       reflector_alphabet = nil
+      if reflector_kind.nil?
+        raise ArgumentError, "Reflector type not specified"
+      end
+      if initial_position.nil?
+        initial_position = 0
+      end
 
-      if (reflector_kind.class.name == "Symbol")
+      if reflector_kind.is_a? Symbol
         unless RotorMachine::Reflector.constants.include?(reflector_kind)
-          raise ArgumentError, "Invalid reflector kind (symbol #{reflector_kind} not found)" 
+          raise ArgumentError, "Invalid reflector kind (symbol #{reflector_kind} not found)"
         end
         reflector_alphabet = RotorMachine::Reflector.const_get(reflector_kind)
-      elsif (reflector_kind.class.name == "String")
+      elsif reflector_kind.is_a? String
         raise ArgumentError, "Invalid reflector kind (invalid length)" unless reflector_kind.length == 26
         reflector_alphabet = reflector_kind.upcase
       else
-        raise ArgumentError, "Invalid reflector kind (invalid type #{reflector_kind.class.name})"
+        raise ArgumentError, "Invalid reflector kind (invalid type)"
       end
 
       if initial_position.is_a? Numeric
@@ -107,7 +116,7 @@ module RotorMachine
         end
         initial_position = reflector_alphabet.index(initial_position)
       else
-        raise ArgumentError, "Invalid position (invalid type #{initial_position.class.name})"
+        raise ArgumentError, "Invalid position (invalid type)"
       end
 
       return RotorMachine::Reflector.new(reflector_alphabet, initial_position)
@@ -149,19 +158,22 @@ module RotorMachine
 
       m = RotorMachine::Machine.new()
       rotors.each do |r|
-        if r.class.name == "RotorMachine::Rotor"
+        if r.is_a? RotorMachine::Rotor
           m.rotors << r
-        elsif r.class.name == "Symbol"
+        elsif r.is_a? Symbol
           m.rotors << RotorMachine::Factory.build_rotor(rotor_kind: r)
+        else
+          raise ArgumentError, "#{r} is not a rotor or a rotor kind symbol"
         end
       end
 
       unless reflector.nil?
-        if reflector.class.name == "Symbol"
+        if reflector.is_a? Symbol
           m.reflector = RotorMachine::Factory.build_reflector(reflector_kind: reflector)
-        elsif reflector.class.name == "RotorMachine::Reflector"
+        elsif reflector.is_a? RotorMachine::Reflector
           m.reflector = reflector
         else
+          raise ArgumentError, "#{reflector} is not a reflector or reflector kind symbol"
         end
       end
 

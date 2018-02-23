@@ -72,8 +72,8 @@ RSpec.describe "RotorMachine::Machine (serialization)" do
     end
 
     it "should be able to load the config state from a file" do
-      machine_state = YAML.load_file(@yaml_path)
-      expect(machine_state).to be_a_valid_machine_state_hash
+      m = RotorMachine::Machine.empty_machine
+      expect { m.load_machine_state_from(@yaml_path) }.not_to raise_error
     end
 
     it "should be able to load the machine state from a config hash" do
@@ -81,10 +81,19 @@ RSpec.describe "RotorMachine::Machine (serialization)" do
 
       expect(RotorMachine::Machine).to respond_to(:from_yaml)
       m = RotorMachine::Machine.from_yaml(machine_state)
-#      expect(m).to be == @src_machine
-      expect(m.rotors).to be == @src_machine.rotors
-      expect(m.reflector).to be == @src_machine.reflector
-      expect(m.plugboard).to be == @src_machine.plugboard
+      expect(m).to be == @src_machine
+    end
+
+    it "should raise an error if an incompatible YAML file version is provided" do
+      fn = File.join(File.basename(__FILE__), "resources", "invalid_serialization_version.yml")
+      m = RotorMachine::Machine.empty_machine
+      expect { m.load_machine_state_from(fn) }.to raise_error(ArgumentError)
+    end
+
+    it "should raise an error if an incompatible YAML hash version is provided" do
+      machine_state = YAML.load_file(@yaml_path)
+      machine_state[:serialization_version] = 3
+      expect {RotorMachine::Machine.from_yaml(machine_state)}.to raise_error(ArgumentError)
     end
   end
 end

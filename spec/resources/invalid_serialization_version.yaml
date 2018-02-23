@@ -1,0 +1,21 @@
+---
+:serialization_version: 32
+:rotors:
+- :kind: :ROTOR_I
+  :position: 9
+  :step_size: 1
+- :kind: :ROTOR_II
+  :position: 18
+  :step_size: 1
+- :kind: :ROTOR_III
+  :position: 10
+  :step_size: 1
+:reflector:
+  :kind: :REFLECTOR_A
+  :position: 0
+:plugboard:
+  :connections:
+    A: Q
+    Q: A
+    Y: F
+    F: Y

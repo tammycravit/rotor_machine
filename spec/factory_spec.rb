@@ -6,7 +6,7 @@
 #               creating rotors and reflectors.
 ############################################################################
 #  Copyright 2018, Tammy Cravit.
-# 
+#
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
 #  You may obtain a copy of the License at
@@ -50,6 +50,10 @@ RSpec.describe "RotorMachine::Factory" do
         expect(@r).to have_reflector_state(kind: :CUSTOM)
       end
 
+      it "should raise an error if the reflector constant name is not specified" do
+        expect {RotorMachine::Factory.build_reflector(reflector_kind: nil)}.to raise_exception(ArgumentError)
+      end
+
       it "should raise an error if the reflector constant name is not defined" do
         expect {RotorMachine::Factory.build_reflector(reflector_kind: :UNDEFINED_ROTOR)}.to raise_exception(ArgumentError)
       end
@@ -57,6 +61,10 @@ RSpec.describe "RotorMachine::Factory" do
       it "should raise an error if the reflector alphabet is the wrong length" do
         expect {RotorMachine::Factory.build_reflector(reflector_kind: "TOO SHORT")}.to raise_exception(ArgumentError)
         expect {RotorMachine::Factory.build_reflector(reflector_kind: "QWERTYUIOPASDFGHJKLZXCVBNMEXTRALETTERS")}.to raise_exception(ArgumentError)
+      end
+
+      it "should raise an error if an invalid type is provided for reflector_kind" do
+        expect {RotorMachine::Factory.build_reflector(reflector_kind: false)}.to raise_exception(ArgumentError)
       end
     end
 
@@ -76,10 +84,15 @@ RSpec.describe "RotorMachine::Factory" do
       end
 
       it "should raise an error if the numeric position is out of range" do
-        expect {RotorMachine::Factory.build_reflector(reflector_kind: :REFLECTOR_A, 
+        expect {RotorMachine::Factory.build_reflector(reflector_kind: :REFLECTOR_A,
                                                   initial_position: -1)}.to raise_error(ArgumentError)
-        expect {RotorMachine::Factory.build_reflector(reflector_kind: :REFLECTOR_A, 
+        expect {RotorMachine::Factory.build_reflector(reflector_kind: :REFLECTOR_A,
                                                   initial_position: 38)}.to raise_error(ArgumentError)
+      end
+
+      it "should raise an error if the initial position is of invalid type" do
+        expect {RotorMachine::Factory.build_reflector(reflector_kind: :REFLECTOR_A,
+                                                  initial_position: false)}.to raise_error(ArgumentError)
       end
     end
   end
@@ -105,19 +118,23 @@ RSpec.describe "RotorMachine::Factory" do
         expect {RotorMachine::Factory.build_rotor(rotor_kind: "TOO SHORT")}.to raise_exception(ArgumentError)
         expect {RotorMachine::Factory.build_rotor(rotor_kind: "QWERTYUIOPASDFGHJKLZXCVBNMEXTRALETTERS")}.to raise_exception(ArgumentError)
       end
+
+      it "should raise an error if an invalid type is provided for rotor alphabet" do
+        expect {RotorMachine::Factory.build_rotor(rotor_kind: false)}.to raise_exception(ArgumentError)
+      end
     end
 
     context "specifying initial position" do
       it "should allow specifying the initial position as a character" do
         expect {@r = RotorMachine::Factory.build_rotor(rotor_kind: :ROTOR_I, initial_position: "A")}.not_to raise_exception
-        expect(@r).to have_rotor_state(kind: :ROTOR_I, 
-                                       letter: "A", 
+        expect(@r).to have_rotor_state(kind: :ROTOR_I,
+                                       letter: "A",
                                        position: RotorMachine::Rotor::ROTOR_I.index("A"))
       end
 
       it "should allow specifying the initial position as a number" do
         expect {@r = RotorMachine::Factory.build_rotor(rotor_kind: :ROTOR_I, initial_position: 7)}.not_to raise_exception
-        expect(@r).to have_rotor_state(kind: :ROTOR_I, 
+        expect(@r).to have_rotor_state(kind: :ROTOR_I,
                                        letter: RotorMachine::Rotor::ROTOR_I[7],
                                        position: 7)
       end
@@ -127,10 +144,21 @@ RSpec.describe "RotorMachine::Factory" do
       end
 
       it "should raise an error if the numeric position is out of range" do
-        expect {RotorMachine::Factory.build_rotor(rotor_kind: :ROTOR_I, 
+        expect {RotorMachine::Factory.build_rotor(rotor_kind: :ROTOR_I,
                                                   initial_position: -1)}.to raise_error(ArgumentError)
-        expect {RotorMachine::Factory.build_rotor(rotor_kind: :ROTOR_I, 
+        expect {RotorMachine::Factory.build_rotor(rotor_kind: :ROTOR_I,
                                                   initial_position: 38)}.to raise_error(ArgumentError)
+      end
+
+      it "should raise an error if the position is of an invalid type" do
+        expect {RotorMachine::Factory.build_rotor(rotor_kind: :ROTOR_I,
+                                                  initial_position: false)}.to raise_error(ArgumentError)
+      end
+
+      it "should raise an error if the step_size is of an invalid type" do
+        expect {RotorMachine::Factory.build_rotor(rotor_kind: :ROTOR_I,
+                                                  initial_position: 10,
+                                                  step_size: false)}.to raise_error(ArgumentError)
       end
     end
 
@@ -184,6 +212,15 @@ RSpec.describe "RotorMachine::Factory" do
         expect(@m.reflector).to be_nil
       end
 
+      it "should raise an exception if an invalid rotor object is supplied" do
+        @rs[0] = false
+        expect {@m = RotorMachine::Factory.build_machine(rotors: @rs)}.to raise_error(ArgumentError)
+      end
+
+      it "should raise an exception if an invalid reflector object is supplied" do
+        expect {@m = RotorMachine::Factory.build_machine(rotors: @rs, reflector: false)}.to raise_error(ArgumentError)
+      end
+
       it "should allow you to construct a machine with plugboard connections specified" do
         expect {@m = RotorMachine::Factory.build_machine(rotors: @rs, reflector: @rf, connections: @cn)}.not_to raise_error
         "AQRY".chars.each { |l| expect(@m.plugboard.connected?(l)).to be_truthy }
@@ -191,21 +228,21 @@ RSpec.describe "RotorMachine::Factory" do
 
       it "should allow you to specify rotors and reflectors as symbols" do
         expect {@m = RotorMachine::Factory.build_machine(
-          rotors: [:ROTOR_I, :ROTOR_II, :ROTOR_III], 
-          reflector: :REFLECTOR_A, 
+          rotors: [:ROTOR_I, :ROTOR_II, :ROTOR_III],
+          reflector: :REFLECTOR_A,
           connections: @cn)}.not_to raise_error
 
         expect(@m).to be_instance_of(RotorMachine::Machine)
         expect(@m.rotors.count).to be == 3
-        expect(@m.rotors[0]).to have_rotor_state(kind: :ROTOR_I, 
+        expect(@m.rotors[0]).to have_rotor_state(kind: :ROTOR_I,
                                                  position: 0,
                                                  letter: RotorMachine::Rotor::ROTOR_I[0],
                                                  step_size: 1)
-        expect(@m.rotors[1]).to have_rotor_state(kind: :ROTOR_II, 
+        expect(@m.rotors[1]).to have_rotor_state(kind: :ROTOR_II,
                                                  position: 0,
                                                  letter: RotorMachine::Rotor::ROTOR_II[0],
                                                  step_size: 1)
-        expect(@m.rotors[2]).to have_rotor_state(kind: :ROTOR_III, 
+        expect(@m.rotors[2]).to have_rotor_state(kind: :ROTOR_III,
                                                  position: 0,
                                                  letter: RotorMachine::Rotor::ROTOR_III[0],
                                                  step_size: 1)
