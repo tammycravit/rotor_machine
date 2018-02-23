@@ -171,4 +171,21 @@ RSpec.describe "RotorMachine::Rotor" do
       expect{@rotor.position = []}.to raise_error(ArgumentError, "Invalid argument to position= (Array)") 
     end
   end
+
+  context "miscellaneous functions" do
+    it "should be able to compare itself to another rotor" do
+      one   = RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_I, 0, 1)
+      two   = RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_I, 0, 1)
+      three = RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_II, 0, 1)
+      four  = RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_I, 8, 1)
+      five  = RotorMachine::Rotor.new(RotorMachine::Rotor::ROTOR_I, 0, 3)
+
+      expect(one).to       be == two
+      expect(two).to       be == one
+      expect(three).not_to be == one
+      expect(four).not_to  be == one
+      expect(five).not_to  be == one
+    end
+  end
+
 end

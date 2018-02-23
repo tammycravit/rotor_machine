@@ -92,4 +92,18 @@ RSpec.describe "RotorMachine::Reflector" do
       expect(@reflector.reflect("123ABC123")).to be == "123EJM123"
     end
   end
+
+  context "miscellaneous functions" do
+    it "should be able to compare itself to another reflector" do
+      one = RotorMachine::Reflector.new(RotorMachine::Reflector::REFLECTOR_A, 0)
+      two = RotorMachine::Reflector.new(RotorMachine::Reflector::REFLECTOR_A, 0)
+      three = RotorMachine::Reflector.new(RotorMachine::Reflector::REFLECTOR_B, 0)
+      four = RotorMachine::Reflector.new(RotorMachine::Reflector::REFLECTOR_A, 17)
+
+      expect(one).to be == two
+      expect(two).to be == one
+      expect(three).not_to be == one
+      expect(four).not_to be == one
+    end
+  end
 end

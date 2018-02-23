@@ -16,8 +16,9 @@ module RotorMachine
   #   from B to A.
   # - A letter cannot be connected to itself.
   class Plugboard
+    attr_reader :connections
 
-    ## 
+    ##
     # Create a new, empty Plugboard object.
     #
     # By default, no letters are connected in the plugboard, and all input
@@ -89,12 +90,16 @@ module RotorMachine
       @connections.keys.include?(letter.upcase)
     end
 
-    ## 
+    ##
     # Produce a human-readable representation of the #{Plugboard}'s state.
     #
     # @return [String] A description of the current state.
     def to_s
       "a RotorMachine::Plugboard with connections: #{@connections.to_s}"
+    end
+
+    def ==(another_plugboard)
+      @connections == another_plugboard.connections
     end
   end
 end

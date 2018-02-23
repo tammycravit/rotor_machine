@@ -29,6 +29,8 @@ module RotorMachine
     # {Rotor} based on either a numeric position or a letter position.
     attr_reader  :position
 
+    attr_reader :letters
+
     ##
     # Get or set the `step_size` - the number of positions the rotor should
     # advance every time it's stepped.
@@ -37,7 +39,7 @@ module RotorMachine
     ##
     # Provides the configuration of the German IC Enigma {Rotor}.
     ROTOR_IC = "DMTWSILRUYQNKFEJCAZBPGXOHV".freeze
-    
+
     ##
     # Provides the configuration of the German IIC Enigma {Rotor}.
     ROTOR_IIC = "HQZGPJTMOBLNCIFDYAWVEUSRKX".freeze
@@ -197,5 +199,12 @@ module RotorMachine
     def to_s
       return "a RotorMachine::Rotor of type '#{self.rotor_kind_name}', position=#{self.position} (#{self.current_letter}), step_size=#{@step_size}"
     end
+
+    def ==(another_rotor)
+      @letters == another_rotor.letters &&
+      position == another_rotor.position &&
+      step_size == another_rotor.step_size
+    end
+
   end
 end

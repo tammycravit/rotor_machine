@@ -181,4 +181,18 @@ RSpec.describe "RotorMachine::Machine" do
       expect { machine.encipher("THIS IS A TEST") }.to raise_error(ArgumentError, "Cannot encipher; no reflector loaded")
     end
   end
+
+  context "miscellaneous functionality" do
+    it "should be able to compare itself to another machine" do
+      one = RotorMachine::Machine.default_machine
+      two = RotorMachine::Machine.default_machine
+
+      three = RotorMachine::Machine.default_machine
+      three.rotors[2] = RotorMachine::Rotor.new("QWERTYUIOPLKJHGFDASZXCVBNM", 0, 1)
+
+      expect(one).to be == two
+      expect(two).to be == one
+      expect(three).not_to be == one
+    end
+  end
 end

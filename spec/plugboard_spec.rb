@@ -92,4 +92,24 @@ RSpec.describe "RotorMachine::Plugboard" do
       expect{@plugboard.disconnect('X')}.to raise_error(ArgumentError, 'X is not connected')
     end
   end
+
+  context "miscellaneous functionality" do
+    it "should know how to compare itself to another plugboard" do
+      one = RotorMachine::Plugboard.new()
+      two = RotorMachine::Plugboard.new()
+      three = RotorMachine::Plugboard.new()
+
+      one.connect 'A', 'B'
+      one.connect 'C', 'Q'
+
+      two.connect 'A', 'B'
+      two.connect 'C', 'Q'
+
+      three.connect 'M', 'F'
+
+      expect(one).to be == two
+      expect(two).to be == one
+      expect(three).not_to be == one
+    end
+  end
 end

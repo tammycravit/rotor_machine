@@ -139,5 +139,10 @@ module RotorMachine
     def to_s
       "a RotorMachine::Reflector of type '#{self.reflector_kind_name.to_s}'"
     end
+
+    def ==(another_reflector)
+      self.letters == another_reflector.letters &&
+      self.position == another_reflector.position
+    end
   end
 end
