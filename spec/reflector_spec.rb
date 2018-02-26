@@ -7,7 +7,7 @@
 #               makes the Enigma machine's encryption symmetrical.
 ############################################################################
 #  Copyright 2018, Tammy Cravit.
-# 
+#
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
 #  You may obtain a copy of the License at
@@ -59,12 +59,12 @@ RSpec.describe "RotorMachine::Reflector" do
   end
 
   context "repositioning" do
-    it "should be able to be repositioned to a specific letter" do 
+    it "should be able to be repositioned to a specific letter" do
       @reflector.position = "Q"
       expect(@reflector).to have_reflector_state(letter: "Q", position: RotorMachine::Reflector::REFLECTOR_A.index("Q"))
     end
 
-    it "should be able to be repositioned to a specific numeric position" do 
+    it "should be able to be repositioned to a specific numeric position" do
       @reflector.position = 11
       expect(@reflector).to have_reflector_state(letter: RotorMachine::Reflector::REFLECTOR_A[11], position: 11)
     end
@@ -77,6 +77,12 @@ RSpec.describe "RotorMachine::Reflector" do
       expect {@reflector.position = -10}.to raise_error(ArgumentError)
       expect {@reflector.position = 45}.to raise_error(ArgumentError)
     end
+
+    it "should raise an error when an invalid position type is specified" do
+      expect {@reflector.position = false}.to raise_error(ArgumentError)
+      expect {@reflector.position = nil}.to raise_error(ArgumentError)
+    end
+
   end
 
   context "transposition" do

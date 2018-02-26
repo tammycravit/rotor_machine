@@ -156,6 +156,10 @@ RSpec.describe "RotorMachine::Factory" do
       it "should raise an error if an invalid type is provided for rotor alphabet" do
         expect {RotorMachine::Factory.build_rotor(rotor_kind: false)}.to raise_exception(ArgumentError)
       end
+
+      it "should raise an error if a nil value is provided for rotor alphabet" do
+        expect {RotorMachine::Factory.build_rotor(rotor_kind: nil)}.to raise_exception(ArgumentError)
+      end
     end
 
     context "specifying initial position" do
