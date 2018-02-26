@@ -7,6 +7,43 @@ module RotorMachine
     extend self
 
     ##
+    # Generates a default-configuration RotorMachine, with the following
+    # state:
+    #
+    # - Rotors I, II, III, each set to A and configured to advance a single
+    #   step at a time
+    # - Reflector A
+    # - An empty plugboard with no connections
+    #
+    # The {RotorMachine::Machine#default_machine} method calls this factory
+    # method, and is maintained there for backward compatibility.
+    def default_machine
+      m = build_machine(
+        rotors: [:ROTOR_I, :ROTOR_II, :ROTOR_III],
+        reflector: build_reflector(reflector_kind: :REFLECTOR_A)
+        )
+      m.set_rotors("AAA")
+      return m
+    end
+
+    ##
+    # Generates an empty-configuration RotorMachine, with the following
+    # state:
+    #
+    # - No rotors
+    # - No reflector
+    # - An empty plugboard with no connections
+    #
+    # A RotorMachine in this state will raise an {ArgumentError} until you
+    # outfit it with at least one rotor and a reflector.
+    #
+    # The {RotorMachine::Machine#default_machine} method calls this factory
+    # method, and is maintained there for backward compatibility.
+    def empty_machine
+      return build_machine()
+    end
+
+    ##
     # Build a new {Rotor} and return it.
     #
     # The options hash for this method can accept the following named

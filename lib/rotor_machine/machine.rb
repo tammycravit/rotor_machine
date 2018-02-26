@@ -80,6 +80,18 @@ module RotorMachine
     attr_accessor :rotors, :reflector, :plugboard
 
     ##
+    # Initialize a RotorMachine object.
+    #
+    # This object won't be usable until you add rotors, a reflector and a
+    # plugboard. Using the {#default_machine} and {#empty_machine} helper class
+    # methods is the preferred way to initialize functioning machines.
+    def initialize()
+      @rotors = []
+      @reflector = nil
+      @plugboard = nil
+    end
+
+    ##
     # Generates a default-configuration RotorMachine, with the following
     # state:
     #
@@ -87,13 +99,12 @@ module RotorMachine
     #   step at a time
     # - Reflector A
     # - An empty plugboard with no connections
+    #
+    # This method is just a proxy for the equivalently-named factory method in the
+    # {RotorMachine::Factory} class, and is maintained here for backward
+    # compatibility.
     def self.default_machine
-      m = RotorMachine::Factory.build_machine(
-        rotors: [:ROTOR_I, :ROTOR_II, :ROTOR_III],
-        reflector: RotorMachine::Factory::build_reflector(reflector_kind: :REFLECTOR_A)
-      )
-      m.set_rotors("AAA")
-      return m
+      RotorMachine::Factory.default_machine
     end
 
     ##
@@ -106,20 +117,12 @@ module RotorMachine
     #
     # A RotorMachine in this state will raise an {ArgumentError} until you
     # outfit it with at least one rotor and a reflector.
-    def self.empty_machine
-      RotorMachine::Factory.build_machine()
-    end
-
-    ##
-    # Initialize a RotorMachine object.
     #
-    # This object won't be usable until you add rotors, a reflector and a
-    # plugboard. Using the {#default_machine} and {#empty_machine} helper class
-    # methods is the preferred way to initialize functioning machines.
-    def initialize()
-      @rotors = []
-      @reflector = nil
-      @plugboard = nil
+    # This method is just a proxy for the equivalently-named factory method in the
+    # {RotorMachine::Factory} class, and is maintained here for backward
+    # compatibility.
+    def self.empty_machine
+      RotorMachine::Factory.empty_machine()
     end
 
     ##

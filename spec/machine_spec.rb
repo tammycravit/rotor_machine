@@ -152,7 +152,7 @@ RSpec.describe "RotorMachine::Machine" do
       expect(machine.rotors[1]).to have_rotor_state(kind: :ROTOR_II, letter: "A", step_size: 1)
       expect(machine.rotors[2]).to have_rotor_state(kind: :ROTOR_III, letter: "A", step_size: 1)
 
-      expect(machine.reflector).to have_reflector_state(kind: :REFLECTOR_A, 
+      expect(machine.reflector).to have_reflector_state(kind: :REFLECTOR_A,
                                                          position: 0,
                                                          letter: RotorMachine::Reflector::REFLECTOR_A[0])
 

@@ -34,6 +34,40 @@ RSpec.describe "RotorMachine::Factory" do
       expect(RotorMachine::Factory).to respond_to(:build_reflector)
       expect(RotorMachine::Factory).to respond_to(:build_plugboard)
       expect(RotorMachine::Factory).to respond_to(:build_machine)
+      expect(RotorMachine::Factory).to respond_to(:default_machine)
+      expect(RotorMachine::Factory).to respond_to(:empty_machine)
+    end
+  end
+
+  context "#default_machine" do
+    it "should provide a default machine via the #default_machine factory method" do
+      machine = RotorMachine::Factory.default_machine
+
+      expect(machine.rotors).to be_a(Array)
+      expect(machine.rotors.length).to be == 3
+      machine.rotors.each { |r| expect(r).to be_a(RotorMachine::Rotor) }
+      expect(machine.rotors[0]).to have_rotor_state(kind: :ROTOR_I, letter: "A", step_size: 1)
+      expect(machine.rotors[1]).to have_rotor_state(kind: :ROTOR_II, letter: "A", step_size: 1)
+      expect(machine.rotors[2]).to have_rotor_state(kind: :ROTOR_III, letter: "A", step_size: 1)
+
+      expect(machine.reflector).to be_a(RotorMachine::Reflector)
+      expect(machine.reflector).to have_reflector_state(kind: :REFLECTOR_A,
+                                                        position: 0,
+                                                        letter: RotorMachine::Reflector::REFLECTOR_A[0])
+
+      expect(machine.plugboard).not_to be_nil
+      expect(machine.plugboard).to be_a(RotorMachine::Plugboard)
+    end
+  end
+
+  context "#empty_machine" do
+    it "should provide a machine with no rotors or reflector via the #empty_machine factory method" do
+      machine = RotorMachine::Factory.empty_machine
+      expect(machine.rotors).to be_a(Array)
+      expect(machine.rotors.length).to be == 0
+      expect(machine.reflector).to be_nil
+      expect(machine.plugboard).not_to be_nil
+      expect(machine.plugboard).to be_a(RotorMachine::Plugboard)
     end
   end
 
