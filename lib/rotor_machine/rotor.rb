@@ -200,6 +200,14 @@ module RotorMachine
       return "a RotorMachine::Rotor of type '#{self.rotor_kind_name}', position=#{self.position} (#{self.current_letter}), step_size=#{@step_size}"
     end
 
+    ##
+    # Compare this {RotorMachine::Rotor} to another one.
+    #
+    # Returns True if the configuration of the supplied {RotorMachine::Rotor} matches
+    # this one, false otherwise.
+    #
+    # @param another_rotor [RotorMachine::Rotor] The Rotor to compare to this one.
+    # @return [Boolean] True if the configurations match, false otherwise.
     def ==(another_rotor)
       @letters == another_rotor.letters &&
       position == another_rotor.position &&

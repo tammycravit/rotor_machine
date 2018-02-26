@@ -98,6 +98,15 @@ module RotorMachine
       "a RotorMachine::Plugboard with connections: #{@connections.to_s}"
     end
 
+    ##
+    # Compare this {RotorMachine::Plugboard} to another one.
+    #
+    # Returns True if the configuration of the supplied {RotorMachine::Plugboard}
+    # matches this one, false otherwise.
+    #
+    # @param another_plugboard [RotorMachine::Plugboard] The Plugboard to compare to
+    # this one.
+    # @return [Boolean] True if the configurations match, false otherwise.
     def ==(another_plugboard)
       @connections == another_plugboard.connections
     end

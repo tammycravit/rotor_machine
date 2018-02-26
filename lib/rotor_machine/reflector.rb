@@ -140,6 +140,15 @@ module RotorMachine
       "a RotorMachine::Reflector of type '#{self.reflector_kind_name.to_s}'"
     end
 
+    ##
+    # Compare this {RotorMachine::Reflector} to another one.
+    #
+    # Returns True if the configuration of the supplied {RotorMachine::Reflector}
+    # matches this one, false otherwise.
+    #
+    # @param another_reflector [RotorMachine::Reflector] The Reflector to compare 
+    # to this one.
+    # @return [Boolean] True if the configurations match, false otherwise.
     def ==(another_reflector)
       self.letters == another_reflector.letters &&
       self.position == another_reflector.position

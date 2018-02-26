@@ -375,6 +375,16 @@ module RotorMachine
       return self
     end
 
+    ##
+    # Compare another {RotorMachine::Machine} instance to this one.
+    #
+    # Returns true if the provided {RotorMachine::Machine} has the same
+    # configuration as this one, and false otherwise.
+    #
+    # @param another_machine [RotorMachine::Machine] The Machine to compare to
+    # this one.
+    # @return [Boolean] True if the machines have identical configuration, false
+    # otherwise.
     def ==(another_machine)
       @rotors == another_machine.rotors &&
         @reflector == another_machine.reflector &&
