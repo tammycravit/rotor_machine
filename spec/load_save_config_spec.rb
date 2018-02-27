@@ -37,6 +37,7 @@ RSpec.describe "RotorMachine::Machine (serialization)" do
     before(:each) do
       @m = RotorMachine::Machine.default_machine()
       @m.rotors[2] = RotorMachine::Rotor.new("QWERTYUIOPLKJHGFDSAZXCVBNM", 0, 1)
+      @m.reflector = RotorMachine::Reflector.new("QWERTYUIOPASDFGHJKLZXCVBNM", 0)
       @m.plugboard.connect('A', 'Q')
       @m.plugboard.connect('F', 'P')
     end
@@ -59,6 +60,11 @@ RSpec.describe "RotorMachine::Machine (serialization)" do
       expect(@m).to respond_to(:save_machine_state_to)
       @m.save_machine_state_to("/tmp/machine_config.yml")
       expect(File).to exist("/tmp/machine_config.yml")
+    end
+
+    it "should raise an error if the requested file can't be written to" do
+      expect(Dir).not_to exist("/tmp/nonexistent_dir")
+      expect(@m.save_machine_state_to("/tmp/nonexistent_dir/machine_config.yml")).to be_falsy
     end
   end
 
@@ -84,10 +90,11 @@ RSpec.describe "RotorMachine::Machine (serialization)" do
       expect(m).to be == @src_machine
     end
 
-    it "should raise an error if an incompatible YAML file version is provided" do
-      fn = File.join(File.basename(__FILE__), "resources", "invalid_serialization_version.yml")
+    it "should raise an error if a nonexistent file is specified" do
+      bogus_file = File.join( File.dirname(__FILE__), "resources", "bogus.yml")
+      expect(File).not_to exist(bogus_file)
       m = RotorMachine::Machine.empty_machine
-      expect { m.load_machine_state_from(fn) }.to raise_error(ArgumentError)
+      expect {m.load_machine_state_from(bogus_file)}.to raise_error(ArgumentError)
     end
 
     it "should raise an error if an incompatible YAML hash version is provided" do

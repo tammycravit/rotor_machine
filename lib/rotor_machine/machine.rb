@@ -293,20 +293,11 @@ module RotorMachine
     #
     # @param filepath [String] The path to the YAML file to which the machine
     # state should be saved.
-    # @return [Boolean] True if the save operation completed successfully, false
-    # if an error was raised.
     def load_machine_state_from(filepath)
       raise ArgumentError, "File path \"#{filepath}\" not found!" unless File.exist?(filepath)
-      begin
-        config = YAML.load(filepath)
-        if config[:serialization_version] > RotorMachine::VERSION_DATA[0]
-          raise ArgumentError, "Serialization Data Version Mismatch"
-        end
-        self.set_machine_config_from(config)
-        return true
-      rescue
-        return false
-      end
+      c = YAML.load(File.open(filepath))
+      self.set_machine_config_from(c)
+      return true
     end
 
     ##
