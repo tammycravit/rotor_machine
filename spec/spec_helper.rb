@@ -1,7 +1,7 @@
 require 'simplecov'
 SimpleCov.start do
   add_group "Library", "lib"
-  add_group "Tests",   "spec" 
+  add_group "Tests",   "spec"
 end
 
 require "bundler/setup"
