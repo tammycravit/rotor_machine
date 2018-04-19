@@ -1,7 +1,10 @@
 require 'simplecov'
+require 'simplecov-erb'
+
 SimpleCov.start do
   add_group "Library", "lib"
   add_group "Tests",   "spec"
+  SimpleCov.formatter = SimpleCov::Formatter::ERBFormatter
 end
 
 require "bundler/setup"
