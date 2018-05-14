@@ -61,6 +61,10 @@ RSpec.describe "RotorMachine::Rotor" do
     it "should raise an exception if you try to create a rotor with no type" do
       expect{RotorMachine::Rotor.new()}.to raise_error(ArgumentError, "wrong number of arguments (given 0, expected 1..3)")
     end
+
+    it "should raise an exception if you try to create a rotor with duplicate characters" do
+      expect {RotorMachine::Rotor.new("ABCDEFGHIJKLMNOPQRSTUVWXYY")}.to raise_error(ArgumentError, "Initialization string contains duplicate letters")
+    end
   end
 
   context "preliminaries" do

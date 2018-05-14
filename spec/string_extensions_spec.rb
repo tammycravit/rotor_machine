@@ -31,6 +31,21 @@ RSpec.describe "RotorMachine::StringExtensions" do
     @text = "THIS IS A TEST OF IN BLOCKS OF"
   end
 
+  context "#is_uniq?" do
+    it "should be a method of the String class" do
+      expect("ABCDEF").to respond_to(:is_uniq?)
+    end
+
+    it "should return true if the string only contains unique characters" do
+      expect("ABCDEF".is_uniq?).to be_truthy
+    end
+
+    it "should return false if the string contains duplicated characters" do
+      expect("ABCCDEF".is_uniq?).not_to be_truthy
+      expect("ABCCCCDEEEEF".is_uniq?).not_to be_truthy
+    end
+  end
+
   context "#in_blocks_of" do
     it "should be a method of the String class" do
       expect(@text).to respond_to(:in_blocks_of)

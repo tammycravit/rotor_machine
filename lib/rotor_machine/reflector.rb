@@ -58,6 +58,8 @@ module RotorMachine
     #        Because the reflector does not rotate, this is essentially just
     #        an additional permutation factor for the encipherment.
     def initialize(selected_reflector, start_position = 0)
+      raise ArgumentError, "Initialization string contains duplicate letters" unless selected_reflector.is_uniq?
+
       @letters = selected_reflector.chars.freeze
       @alphabet = ALPHABET.chars.freeze
       @position = start_position

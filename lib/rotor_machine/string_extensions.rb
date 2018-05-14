@@ -4,6 +4,15 @@
 # @author Tammy Cravit <tammycravit@me.com>
 
 class String
+
+  ##
+  # Detect if a string has any duplicated characters
+  #
+  # @return True if the string has no duplicated characters, false otherwise.
+  def is_uniq?
+    self.chars.uniq.length == self.chars.length
+  end
+
   ##
   # Break a string into blocks of a certain number of characters.
   #

@@ -38,6 +38,10 @@ RSpec.describe "RotorMachine::Reflector" do
         expect(@reflector.class).to be_const_defined(r)
       end
     end
+
+    it "should raise an error if the initialization string contains duplicate characters" do
+      expect { RotorMachine::Reflector.new("QWERTYUIOPLKJHGFDSAZXCVBNNJJ") }.to raise_error(ArgumentError, "Initialization string contains duplicate letters")
+    end
   end
 
   context "basic functionality" do

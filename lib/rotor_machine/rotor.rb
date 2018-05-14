@@ -86,6 +86,7 @@ module RotorMachine
     # @param step_size [Integer] The number of positions to step the rotor
     #        each time it is advanced. Defaults to 1.
     def initialize(rotor, start_on=0, step_size=1)
+      raise ArgumentError, "Initialization string contains duplicate letters" unless rotor.is_uniq?
       @letters = rotor.chars.freeze
       self.position = start_on
       @step_size = step_size
