@@ -32,7 +32,7 @@ require 'rspec/expectations'
 #   of letters on a standard reflector, passing in a string does *not* assume
 #   a reflector type of :CUSTOM; you'll need to make a separate check for this
 #   if desired.
-#   
+#
 # - `position`: Checks that the numeric position of the reflector matches the
 #   provided value.
 #

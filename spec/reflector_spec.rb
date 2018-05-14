@@ -40,6 +40,43 @@ RSpec.describe "RotorMachine::Reflector" do
     end
   end
 
+  context "matcher tests" do
+    it "should detect a null reflector" do
+      x = nil
+      expect(x).not_to have_reflector_state({})
+    end
+
+    it "should detect an object that isn't a reflector" do
+      x = {}
+      expect(x).not_to have_reflector_state({})
+    end
+
+    it "should detect an invalid kind symbol" do
+      x = RotorMachine::Reflector.new(RotorMachine::Reflector::REFLECTOR_A)
+      expect(x).not_to have_reflector_state({kind: :IHVALID})
+    end
+
+    it "should detect an incorrect kind string" do
+      x = RotorMachine::Reflector.new(RotorMachine::Reflector::REFLECTOR_A)
+      expect(x).not_to have_reflector_state({kind: "QWERTYUIOPLKJHGFDSAZXCVBNM"})
+    end
+
+    it "should detect an invalid kind type" do
+      x = RotorMachine::Reflector.new(RotorMachine::Reflector::REFLECTOR_A)
+      expect(x).not_to have_reflector_state({kind: {}})
+    end
+
+    it "should detect an incorrect position" do
+      x = RotorMachine::Reflector.new(RotorMachine::Reflector::REFLECTOR_A)
+      expect(x).not_to have_reflector_state({kind: :REFLECTOR_A, position: 48})
+    end
+
+    it "should detect an incorrect current letter" do
+      x = RotorMachine::Reflector.new(RotorMachine::Reflector::REFLECTOR_A)
+      expect(x).not_to have_reflector_state({kind: :REFLECTOR_A, letter: "?"})
+    end
+  end
+
   context "basic functionality" do
     it "should know what kind of reflector it is" do
       expect(@reflector).to have_reflector_state(kind: :REFLECTOR_A)
