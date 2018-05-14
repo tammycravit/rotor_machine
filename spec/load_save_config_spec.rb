@@ -72,6 +72,11 @@ RSpec.describe "RotorMachine::Machine (serialization)" do
     before(:all) do
       @yaml_path = File.join( File.dirname(__FILE__), "resources", "test_machine.yml")
       @src_machine = RotorMachine::Machine.default_machine
+      @src_machine.rotors[2] = RotorMachine::Factory::build_rotor(
+        rotor_kind: "QWERTYUIOPLKJHGFDSAZXCVBNM",
+        initial_position: 1,
+        step_size: 1
+      )
       @src_machine.plugboard.connect 'A', 'Q'
       @src_machine.plugboard.connect 'Y', 'F'
       @src_machine.save_machine_state_to(@yaml_path)
@@ -88,6 +93,14 @@ RSpec.describe "RotorMachine::Machine (serialization)" do
       expect(RotorMachine::Machine).to respond_to(:from_yaml)
       m = RotorMachine::Machine.from_yaml(machine_state)
       expect(m).to be == @src_machine
+    end
+
+    it "should be able to read a machine with a custom reflector" do
+      yaml_path = File.join( File.dirname(__FILE__), "resources", "custom_reflector.yml")
+      machine_state = YAML.load_file(yaml_path)
+      m = RotorMachine::Machine.from_yaml(machine_state)
+      expect(m.reflector.reflector_kind_name).to be == :CUSTOM
+      expect(m.reflector.letters).to be == "QWERTYUIOPLKJHGFDSAZXCVBNM"
     end
 
     it "should raise an error if a nonexistent file is specified" do

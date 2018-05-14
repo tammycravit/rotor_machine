@@ -12,7 +12,8 @@
   :step_size: 1
   :letters: QWERTYUIOPLKJHGFDSAZXCVBNM
 :reflector:
-  :kind: :REFLECTOR_A
+  :kind: :CUSTOM
+  :letters: QWERTYUIOPLKJHGFDSAZXCVBNM
   :position: 0
 :plugboard:
   :connections:
