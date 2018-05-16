@@ -22,7 +22,6 @@
 
 require 'rspec/expectations'
 
-
 RSpec::Matchers.define :be_a_valid_machine_state_hash do
   match do |actual|
     @errors = []
@@ -30,7 +29,7 @@ RSpec::Matchers.define :be_a_valid_machine_state_hash do
     # Validate that the serialized data contains rotors, reflector and
     # plugboard data.
     @errors.push("expected machine state to be a Hash") unless actual.is_a?(Hash)
-    [:rotors, :reflector, :plugboard].each do |elem|
+    [:serialization_version, :rotors, :reflector, :plugboard].each do |elem|
       @errors.push("expected machine state to include #{elem}") unless actual.keys.include?(elem)
     end
 
