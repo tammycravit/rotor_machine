@@ -311,7 +311,13 @@ module RotorMachine
     # @return [RotorMachine::Machine] A new {RotorMachine::Machine} created from the
     # supplied config hash.
     def self.from_yaml(config)
-      if config[:serialization_version] > RotorMachine::VERSION_DATA[0]
+      unless config.keys.include?(:serialization_version)
+        raise ArgumentError, "Serialization Data Version Mismatch"
+      end
+      unless config[:serialization_version].is_a?(Numeric)
+        raise ArgumentError, "Serialization Data Version Mismatch"
+      end
+      if (config[:serialization_version] > RotorMachine::VERSION_DATA[0]) || (config[:serialization_version] < 1)
         raise ArgumentError, "Serialization Data Version Mismatch"
       end
 

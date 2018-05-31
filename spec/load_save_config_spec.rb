@@ -110,9 +110,21 @@ RSpec.describe "RotorMachine::Machine (serialization)" do
       expect {m.load_machine_state_from(bogus_file)}.to raise_error(ArgumentError)
     end
 
-    it "should raise an error if an incompatible YAML hash version is provided" do
+    it "should raise an error if an incompatibly old YAML hash version is provided" do
       machine_state = YAML.load_file(@yaml_path)
-      machine_state[:serialization_version] = 3
+      machine_state[:serialization_version] = -1
+      expect {RotorMachine::Machine.from_yaml(machine_state)}.to raise_error(ArgumentError)
+    end
+
+    it "should raise an error if an incompatibly new YAML hash version is provided" do
+      machine_state = YAML.load_file(@yaml_path)
+      machine_state[:serialization_version] = RotorMachine::VERSION_DATA[0] + 1
+      expect {RotorMachine::Machine.from_yaml(machine_state)}.to raise_error(ArgumentError)
+    end
+
+    it "should raise an error if no YAML hash version is provided" do
+      machine_state = YAML.load_file(@yaml_path)
+      machine_state.delete(:serialization_version)
       expect {RotorMachine::Machine.from_yaml(machine_state)}.to raise_error(ArgumentError)
     end
   end
