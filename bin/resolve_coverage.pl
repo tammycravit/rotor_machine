@@ -12,6 +12,7 @@ use File::Basename;
 use File::Slurp;
 use Term::ANSIColor qw(:constants);
 use Cwd;
+use Getopt::Long;
 
 ####################
 # CONFIGURATION CONSTANTS
@@ -19,12 +20,13 @@ use Cwd;
 
 $FILE_PREFIX              = "";
 $FILE_SUFFIX              = "";
-$FILENAME_COLOR           = BLUE;
 $EXAMPLE_PREFIX           = "";
 $EXAMPLE_SUFFIX           = "\n";
 $CONTEXT_SIZE             = 2;
 $CONTEXT_UNCOVERED_MARKER = "->";
 $CONTEXT_UNCOVERED_COLOR  = RED;
+$FILENAME_COLOR           = BLUE;
+$BARE_OUTPUT              = undef;
 
 ####################
 # Script begins here
@@ -40,11 +42,18 @@ sub generate_file_context
 
   if (length $FILE_PREFIX) { print $FILE_PREFIX; }
 
-  print
-    BOLD, WHITE, "*** ", RESET
-    BOLD, $FILENAME_COLOR, $filename, RESET,
-    WHITE, " ($#content lines)", RESET,
-    "\n";
+  if ($BARE_OUTPUT)
+  {
+    print "*** ", $filename, " ($#content lines)", "\n";
+  }
+  else
+  {
+    print
+      BOLD, WHITE, "*** ", RESET
+      BOLD, $FILENAME_COLOR, $filename, RESET,
+      WHITE, " ($#content lines)", RESET,
+      "\n";
+  }
   print "\n";
 
   foreach my $which_line (@lines)
@@ -59,14 +68,28 @@ sub generate_file_context
         my $color = ($i == $which_line ? $CONTEXT_UNCOVERED_COLOR : WHITE);
         my $number_color = CYAN;
         my $reset = RESET;
-        printf "%s%s%s%5.0d:%s %s%s\n",
-          $color,
-          ($i == $which_line ? $CONTEXT_UNCOVERED_MARKER : (" " x length($CONTEXT_UNCOVERED_MARKER))),
-          $number_color,
-          $i+1,
-          $color,
-          $content[$i],
-          $reset;
+        if ($BARE_OUTPUT)
+        {
+          printf "%s%s%s%5.0d:%s %s%s\n",
+            "",
+            ($i == $which_line ? $CONTEXT_UNCOVERED_MARKER : (" " x length($CONTEXT_UNCOVERED_MARKER))),
+            "",
+            $i+1,
+            "",
+            $content[$i],
+            "";
+        }
+        else
+        {
+          printf "%s%s%s%5.0d:%s %s%s\n",
+            $color,
+            ($i == $which_line ? $CONTEXT_UNCOVERED_MARKER : (" " x length($CONTEXT_UNCOVERED_MARKER))),
+            $number_color,
+            $i+1,
+            $color,
+            $content[$i],
+            $reset;
+        }
       }
     }
 
@@ -75,6 +98,16 @@ sub generate_file_context
 
   if (length $FILE_SUFFIX) { print $FILE_SUFFIX; }
 }
+
+GetOptions(
+  "file-prefix=s" => \$FILE_PREFIX,
+  "file-suffix=s" => \$FILE_SUFFIX,
+  "example-prefix=s" => \$EXAMPLE_PREFIX,
+  "example-suffix=s" => \$EXAMPLE_SUFFIX,
+  "context-size=i"   => \$CONTEXT_SIZE,
+  "context-marker=s" => \$CONTEXT_MARKER,
+  "bare"             => \$BARE_OUTPUT,
+);
 
 $coverage_file = File::Spec->rel2abs($ARGV[0]);
 $project_root  = dirname($coverage_file);
@@ -92,9 +125,20 @@ print "*                                                                        
 print "* Version 1.00, 2018-06-15, Tammy Cravit, tammycravit\@me.com               *\n";
 print "****************************************************************************\n";
 print "\n";
-print BOLD, MAGENTA, "==> Coverage file: ", RESET, MAGENTA, $coverage_file, "\n", RESET;
-print BOLD, MAGENTA, "==> Project root : ", RESET, MAGENTA, $project_root, "\n", RESET;
-print BOLD, MAGENTA, "==> Context lines: ", RESET, MAGENTA, $CONTEXT_SIZE, "\n", RESET;
+
+if ($BARE_OUTPUT)
+{
+  print "==> Coverage file: ", $coverage_file, "\n";
+  print "==> Project root : ", $project_root, "\n";
+  print "==> Context lines: ", $CONTEXT_SIZE, "\n";
+}
+else
+{
+  print BOLD, MAGENTA, "==> Coverage file: ", RESET, MAGENTA, $coverage_file, "\n", RESET;
+  print BOLD, MAGENTA, "==> Project root : ", RESET, MAGENTA, $project_root, "\n", RESET;
+  print BOLD, MAGENTA, "==> Context lines: ", RESET, MAGENTA, $CONTEXT_SIZE, "\n", RESET;
+}
+
 print "\n";
 
 die "Usage: $0 coverage_file.txt\n" unless (-f $coverage_file);
@@ -112,4 +156,3 @@ while (<COVERAGE>)
 }
 close (COVERAGE);
 exit 0;
-
