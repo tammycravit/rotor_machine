@@ -105,7 +105,7 @@ GetOptions(
   "example-prefix=s" => \$EXAMPLE_PREFIX,
   "example-suffix=s" => \$EXAMPLE_SUFFIX,
   "context-size=i"   => \$CONTEXT_SIZE,
-  "context-marker=s" => \$CONTEXT_MARKER,
+  "context-marker=s" => \$CONTEXT_UNCOVERED_MARKER,
   "bare"             => \$BARE_OUTPUT,
 );
 
@@ -116,7 +116,7 @@ do
   $project_root  = dirname($project_root);
 }
 until ((-d "$project_root/coverage") || ($project_root eq '/'));
-die "Could not find project root starting from $project_file\n" if ($project_root eq "/");
+die "Could not find project root starting from $coverage_file\n" if ($project_root eq "/");
 
 print "****************************************************************************\n";
 print "* resolve_coverage.pl: Parse a simplecov-erb coverage report and generate  *\n";
