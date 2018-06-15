@@ -78,7 +78,12 @@ sub generate_file_context
 
 $coverage_file = File::Spec->rel2abs($ARGV[0]);
 $project_root  = dirname($coverage_file);
-$project_root  = dirname($project_root);
+do
+{
+  $project_root  = dirname($project_root);
+}
+until ((-d "$project_root/coverage") || ($project_root eq '/'));
+die "Could not find project root starting from $project_file\n" if ($project_root eq "/");
 
 print "****************************************************************************\n";
 print "* resolve_coverage.pl: Parse a simplecov-erb coverage report and generate  *\n";
