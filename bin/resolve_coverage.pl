@@ -28,6 +28,9 @@ $CONTEXT_UNCOVERED_COLOR  = RED;
 $FILENAME_COLOR           = BLUE;
 $BARE_OUTPUT              = undef;
 
+$cov_files = 0;
+$cov_lines = 0;
+
 ####################
 # Script begins here
 ####################
@@ -94,9 +97,11 @@ sub generate_file_context
     }
 
     if (length $EXAMPLE_SUFFIX) { print $EXAMPLE_SUFFIX; }
+    $cov_lines++;
   }
 
   if (length $FILE_SUFFIX) { print $FILE_SUFFIX; }
+  $cov_files++;
 }
 
 GetOptions(
@@ -149,4 +154,13 @@ while (<COVERAGE>)
   }
 }
 close (COVERAGE);
+
+unless ($BARE_OUTPUT)
+{
+  print "Done. Processed ",
+        CYAN, $cov_lines, RESET,
+        " examples from ",
+        CYAN, $cov_files, RESET,
+        " files.\n";
+}
 exit 0;
