@@ -1,10 +1,23 @@
 require 'simplecov'
 require 'simplecov-erb'
 
+def run_coverage_resolver
+  coverage_txt = File.expand_path(File.join(File.dirname(__FILE__), "..", "coverage", "coverage.txt"))
+  detail_txt = File.expand_path(File.join(File.dirname(__FILE__), "..", "coverage", "coverage_detail.txt"))
+  resolver_script = "/home/tammy/bin/resolve_coverage.pl"
+  puts "Generating #{detail_txt} with context for code coverage misses"
+  system("#{resolver_script} #{coverage_txt} > #{detail_txt}")
+end
+
 SimpleCov.start do
   add_group "Library", "lib"
   add_group "Tests",   "spec"
   SimpleCov.formatter = SimpleCov::Formatter::ERBFormatter
+end
+
+SimpleCov.at_exit do
+  SimpleCov.result.format!
+  run_coverage_resolver
 end
 
 require "bundler/setup"
