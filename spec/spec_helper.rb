@@ -7,8 +7,8 @@ def run_coverage_resolver
   coverage_txt    = File.expand_path(File.join(project_root, "coverage", "coverage.txt"))
   detail_txt      = File.expand_path(File.join(project_root, "coverage", "coverage_detail.txt"))
 
-  puts "Generating #{detail_txt} with context for code coverage misses"
   system("#{resolver_script} #{coverage_txt} > #{detail_txt}")
+  puts "Contextual coverage report generated for RSpec to #{detail_txt}."
 end
 
 SimpleCov.start do
