@@ -7,7 +7,7 @@ def run_coverage_resolver
   coverage_txt    = File.expand_path(File.join(project_root, "coverage", "coverage.txt"))
   detail_txt      = File.expand_path(File.join(project_root, "coverage", "coverage_detail.txt"))
 
-  system("#{resolver_script} #{coverage_txt} > #{detail_txt}")
+  system("#{resolver_script} --bare #{coverage_txt} > #{detail_txt}")
   puts "Contextual coverage report generated for RSpec to #{detail_txt}."
 end
 

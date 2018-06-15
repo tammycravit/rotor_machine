@@ -118,28 +118,22 @@ do
 until ((-d "$project_root/coverage") || ($project_root eq '/'));
 die "Could not find project root starting from $coverage_file\n" if ($project_root eq "/");
 
-print "****************************************************************************\n";
-print "* resolve_coverage.pl: Parse a simplecov-erb coverage report and generate  *\n";
-print "*                      contextual code snippets for uncovered lines.       *\n";
-print "*                                                                          *\n";
-print "* Version 1.00, 2018-06-15, Tammy Cravit, tammycravit\@me.com               *\n";
-print "****************************************************************************\n";
-print "\n";
+unless ($BARE_OUTPUT)
+{
+  print "****************************************************************************\n";
+  print "* resolve_coverage.pl: Parse a simplecov-erb coverage report and generate  *\n";
+  print "*                      contextual code snippets for uncovered lines.       *\n";
+  print "*                                                                          *\n";
+  print "* Version 1.00, 2018-06-15, Tammy Cravit, tammycravit\@me.com               *\n";
+  print "****************************************************************************\n";
+  print "\n";
 
-if ($BARE_OUTPUT)
-{
-  print "==> Coverage file: ", $coverage_file, "\n";
-  print "==> Project root : ", $project_root, "\n";
-  print "==> Context lines: ", $CONTEXT_SIZE, "\n";
-}
-else
-{
   print BOLD, MAGENTA, "==> Coverage file: ", RESET, MAGENTA, $coverage_file, "\n", RESET;
   print BOLD, MAGENTA, "==> Project root : ", RESET, MAGENTA, $project_root, "\n", RESET;
   print BOLD, MAGENTA, "==> Context lines: ", RESET, MAGENTA, $CONTEXT_SIZE, "\n", RESET;
+  print "\n";
 }
 
-print "\n";
 
 die "Usage: $0 coverage_file.txt\n" unless (-f $coverage_file);
 
