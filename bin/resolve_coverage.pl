@@ -155,7 +155,12 @@ while (<COVERAGE>)
 }
 close (COVERAGE);
 
-unless ($BARE_OUTPUT)
+if ($BARE_OUTPUT)
+{
+  print "resolve_coverage.pl processed ", $cov_lines, " examples from ", $cov_files,
+        " files.\n";
+}
+else
 {
   print "Done. Processed ",
         CYAN, $cov_lines, RESET,
