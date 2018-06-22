@@ -46,6 +46,16 @@ RSpec.describe "RotorMachine::StringExtensions" do
     end
   end
 
+  context "#uniq?" do
+    it "should be a method of the String class" do
+      expect(@text).to respond_to(:uniq?)
+    end
+
+    it "should be an alias for #is_uniq?" do
+      expect(@text.method(:uniq?).original_name).to be == :is_uniq?
+    end
+  end
+
   context "#in_blocks_of" do
     it "should be a method of the String class" do
       expect(@text).to respond_to(:in_blocks_of)

@@ -12,6 +12,7 @@ class String
   def is_uniq?
     self.chars.uniq.length == self.chars.length
   end
+  alias :uniq? :is_uniq?
 
   ##
   # Break a string into blocks of a certain number of characters.
