@@ -88,7 +88,10 @@ RSpec::Matchers.define :have_reflector_state do |options|
     @errors.empty?
   end
 
+  # :nocov:
   failure_message do |actual|
     @errors.join("\n")
   end
+  # :nocov:
+
 end

@@ -96,7 +96,10 @@ RSpec::Matchers.define :have_rotor_state do |options|
     @errors.empty?
   end
 
+  # :nocov:
   failure_message do |actual|
     @errors.join("\n")
   end
+  # :nocov:
+
 end

@@ -102,7 +102,9 @@ RSpec::Matchers.define :be_a_valid_machine_state_hash do
     @errors.empty?
   end
 
+  # :nocov:
   failure_message do
     @errors.join("\n")
   end
+  # :nocov:
 end
