@@ -122,6 +122,12 @@ RSpec.describe "RotorMachine::Machine (serialization)" do
       expect {RotorMachine::Machine.from_yaml(machine_state)}.to raise_error(ArgumentError)
     end
 
+    it "should raise an error if a non-numeric serialization version is provided" do
+      yaml_path = File.join( File.dirname(__FILE__), "resources", "non_numeric_serialization_version.yml")
+      machine_state = YAML.load_file(yaml_path)
+      expect {RotorMachine::Machine.from_yaml(machine_state)}.to raise_error(ArgumentError)
+    end
+
     it "should raise an error if no YAML hash version is provided" do
       machine_state = YAML.load_file(@yaml_path)
       machine_state.delete(:serialization_version)
