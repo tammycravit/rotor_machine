@@ -21,8 +21,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'tcravit_ruby_lib', '~> 0.2'
-  spec.add_dependency 'highline', '~> 2.0'
-  spec.add_dependency 'coderay', '~> 1.1'
+  spec.add_dependency 'colorize', '~> 0.8'
 
   spec.add_development_dependency 'pry', '~> 0.11'
   spec.add_development_dependency 'pry-byebug', '~> 3.6'

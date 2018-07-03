@@ -1,9 +1,10 @@
 #!/usr/bin/env ruby
 
-require 'highline'
-require 'coderay'
 require 'readline'
+require 'colorize'
 require 'rotor_machine'
+
+String.disable_colorization = false
 
 shell = RotorMachine::Shell.new()
 shell.repl()
