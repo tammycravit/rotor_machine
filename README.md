@@ -189,6 +189,22 @@ After the operations in the block are executed, the `RotorMachine.Session` metho
 will return the `RotorMachine::Session` object, which can be further reused if
 needed.
 
+## Using the `rotor_machine` REPL
+
+The `rotor_machine` executable instantatiates an instance of the
+`RotorMachine::Shell` class and then runs its `repl()` method. This creates an
+interactive shell whereby you can interact with a rotor machine. The
+`RotorMachine::Shell` is an interactive wrapper around `RotorMachine::Session`
+with help, readline and ANSI colorization added.
+
+Either run the `rotor_machine` executable, or run the following code to instantiate
+a REPL:
+
+    `RotorMachine::Shell.new().repl`
+
+The REPL provides interactive usage help. Type `help` at the REPL prompt for more
+details.
+
 ## Documentation
 
 The classes in
