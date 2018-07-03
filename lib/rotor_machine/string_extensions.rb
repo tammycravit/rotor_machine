@@ -42,4 +42,11 @@ class String
   end
 
   alias :in_blocks :in_blocks_of
+
+  def tokenize
+    self.
+      split(/\s(?=(?:[^'"]|'[^']*'|"[^"]*")*$)/).
+      select {|s| not s.empty? }.
+      map {|s| s.gsub(/(^ +)|( +$)|(^["']+)|(["']+$)/,'')}
+  end
 end

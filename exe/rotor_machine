@@ -1,3 +1,9 @@
 #!/usr/bin/env ruby
 
-require "rotor_machine"
+require 'highline'
+require 'coderay'
+require 'readline'
+require 'rotor_machine'
+
+shell = RotorMachine::Shell.new()
+shell.repl()
