@@ -49,4 +49,8 @@ class String
       select {|s| not s.empty? }.
       map {|s| s.gsub(/(^ +)|( +$)|(^["']+)|(["']+$)/,'')}
   end
+
+  def is_number?
+    true if Float(self) rescue false
+  end
 end

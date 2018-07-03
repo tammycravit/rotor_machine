@@ -18,7 +18,7 @@ module RotorMachine
     # value is an array listing [description, arguments, aliases].
     COMMANDS =
     {
-      rotor: ["Add a rotor to the machine", "<kind> [position] [step size]", "add_rotor"],
+      rotor: ["Add a rotor to the machine", "<kind> [position] [step_size]", "add_rotor"],
       reflector: ["Set the machine's reflector", "<kind> [position]", nil],
       connect: ["Connect two letters on the plugboard", "<from> <to>", "plug"],
       disconnect: ["Disconnnect a letter (and its inverse) on the plugboard", "<letter>", "unplug"],
@@ -31,6 +31,9 @@ module RotorMachine
       clear_plugboard: ["Clear the current plugboard configuration", nil, nil],
       "help": ["Display help", "[command]", nil],
       "version": ["Display the version of the rotor_machine library", nil, nil],
+      about_prompt: ["Information about the shell prompt", nil, nil],
+      about_rotors: ["List the names of available rotors", nil, nil],
+      about_reflectors: ["List the names of available reflectors", nil, nil],
     }
 
     ##
@@ -39,7 +42,6 @@ module RotorMachine
     # logic of the {#repl} method.
     EXTERNAL_COMMANDS =
     {
-      about_prompt: ["Information about the shell prompt", nil, nil],
       encipher: ["Encode a message", "[message]", "cipher,encode"],
       quit: ["Quit the application", nil, "exit"],
     }
@@ -60,9 +62,23 @@ module RotorMachine
     # @param arglist [Array] Array of arguments provided from the REPL
     # @return [String] A confirmation message, or an error message on failure.
     def rotor(arglist)
-      kind = arglist[0]
-      position = arglist[1] || 0
-      step_size = arglist[2] || 1
+      kind = arglist[0].to_sym
+
+      if arglist[1].nil? || arglist[1].empty?
+        position = 0
+      elsif arglist[1].is_number?
+        position = arglist[1].to_i
+      else
+        position = arglist[1]
+      end
+
+      if arglist[2].nil? || arglist[2].empty?
+        step_size = 1
+      elsif arglist[2].is_number?
+        step_size = arglist[2].to_i
+      else
+        step_size = 1
+      end
 
       @session.rotor(kind, position, step_size)
       "Added rotor #{@session.the_machine.rotors.count} of kind #{kind}"
@@ -74,8 +90,16 @@ module RotorMachine
     # @param arglist [Array] Array of arguments provided from the REPL
     # @return [String] A confirmation message, or an error message on failure.
     def reflector(arglist)
-      kind = arglist[0]
-      position = arglist[1] || 0
+      kind = arglist[0].to_sym
+
+      if arglist[1].nil? || arglist[1].empty?
+        position = 0
+      elsif arglist[1].is_number?
+        position = arglist[1].to_i
+      else
+        position = arglist[1]
+      end
+
       @session.reflector(kind, position)
       "Set reflector of kind #{kind}"
     end
@@ -232,6 +256,31 @@ module RotorMachine
       COMMANDS.keys.include?(cmd) || aliases.include?(cmd)
     end
 
+    def arity(cmd)
+      if COMMANDS.keys.include?(cmd)
+        if COMMANDS[cmd][1].nil?
+          return 0
+        else
+          return COMMANDS[cmd][1].split(' ').select { |x| x.start_with?("<") }.count
+        end
+      else
+        COMMANDS.each do |k, v|
+          unless v[2].nil?
+            v[2].split(',').each do |a|
+              if a.to_sym == cmd.to_sym
+                if v[1].nil?
+                  return 0
+                else
+                  return v[1].split(' ').select { |x| x.start_with?("<") }.count
+                end
+              end
+            end
+          end
+        end
+      end
+      return 0
+    end
+
     ##
     # Return the combined list of command verbs and their arguments/usage.
     def verbs
@@ -260,7 +309,7 @@ module RotorMachine
     ##
     # Display the about help for the REPL prompt. If you redefine the {#readline_prompt}
     # method, you should also redefine this to reflect the new prompt.
-    def about_prompt
+    def about_prompt(arglist)
       puts ""
       puts "The prompt for the shell is in the following format:"
       puts ""
@@ -271,7 +320,40 @@ module RotorMachine
       puts "     XXX - the number of rotors mounted to the machine"
       puts "     YYY - the number of connections on the plugboard"
       puts "     ZZZ - the current positions of the rotors"
+      ""
+    end
+
+    def about_reflectors(arglist)
       puts ""
+      puts "The following reflectors are available with this machine:"
+      puts ""
+      RotorMachine::Reflector.constants.each { |r| puts "     #{r.to_s.colorize(color: :light_blue)}" }
+      puts ""
+      puts "To set the reflector for the machine, use a command like this:"
+      puts ""
+      puts "    Specify reflector:       #{'reflector REFLECTOR_A'.colorize(color: :light_blue)}"
+      puts "    Specify reflector/pos:   #{'reflector REFLECTOR_A 13'.colorize(color: :light_blue)}"
+      puts ""
+      puts "The REPL does not currently support custom reflectors."
+      puts ""
+      ""
+    end
+
+    def about_rotors(arglist)
+      puts ""
+      puts "The following rotors are available with this machine:"
+      puts ""
+      RotorMachine::Rotor.constants.each { |r| puts "     #{r.to_s.colorize(color: :light_blue)}" }
+      puts ""
+      puts "To add a rotor to the machine, use a command like this:"
+      puts ""
+      puts "    Specify rotor         :  #{'rotor ROTOR_I'.colorize(color: :light_blue)}"
+      puts "    Specify rotor/pos     :  #{'rotor ROTOR_I 13'.colorize(color: :light_blue)}"
+      puts "                             #{'rotor ROTOR_I Q'.colorize(color: :light_blue)}"
+      puts "    Specify rotor/pos/step:  #{'rotor ROTOR_I 13 2'.colorize(color: :light_blue)}"
+      puts ""
+      puts "The REPL does not currently support custom rotors."
+      ""
     end
 
     ##
@@ -310,14 +392,16 @@ module RotorMachine
               puts self.encipher(message).colorize(color: :white).bold
             elsif ['exit', 'quit'].include?(cmd)
               break
-            elsif 'about_prompt' == cmd
-              about_prompt
             elsif self.is_internal_verb?(cmd.to_sym)
               begin
-                if cmd == "last_result"
-                  puts self.send(cmd.to_sym, toks).colorize(color: :white).bold
+                if toks.length >= arity(cmd.to_sym)
+                  if cmd == "last_result"
+                    puts self.send(cmd.to_sym, toks).colorize(color: :white).bold
+                  else
+                    puts self.send(cmd.to_sym, toks).colorize(color: :green)
+                  end
                 else
-                  puts self.send(cmd.to_sym, toks).colorize(color: :green)
+                  puts "Command #{cmd} requires at least #{arity(cmd.to_sym)} arguments".colorize(color: :red)
                 end
               rescue Exception => ex
                 puts "Error: #{ex}".colorize(color: :red)
