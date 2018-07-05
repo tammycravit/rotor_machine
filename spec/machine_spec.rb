@@ -77,7 +77,7 @@ RSpec.describe "RotorMachine::Machine" do
       expect(info[3]).to be == "    - a RotorMachine::Rotor of type 'ROTOR_II', position=18 (A), step_size=1"
       expect(info[4]).to be == "    - a RotorMachine::Rotor of type 'ROTOR_III', position=10 (A), step_size=1"
       expect(info[5]).to be == "  Reflector: a RotorMachine::Reflector of type 'REFLECTOR_A'"
-      expect(info[6]).to be == "  Plugboard: a RotorMachine::Plugboard with connections: {\"A\"=>\"C\", \"C\"=>\"A\"}"
+      expect(info[6]).to be == "  Plugboard: a RotorMachine::Plugboard with connections: {\"A\"=>\"C\"}"
     end
   end
 

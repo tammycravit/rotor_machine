@@ -95,7 +95,11 @@ module RotorMachine
     #
     # @return [String] A description of the current state.
     def to_s
-      "a RotorMachine::Plugboard with connections: #{@connections.to_s}"
+      seen = []
+      @connections.each { |k, v| seen << k.to_sym unless seen.include?(v.to_sym) }
+      conn = @connections.clone
+      conn.keys.each { |k| conn.delete(k.to_s) unless seen.include?(k.to_sym) }
+      "a RotorMachine::Plugboard with connections: #{conn.to_s}"
     end
 
     ##
