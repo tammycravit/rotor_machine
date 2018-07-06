@@ -76,7 +76,15 @@ module RotorMachine
     ##
     # Encipher a string.
     def encipher(the_string="")
-      res = @machine.encipher(the_string)
+      if the_string.nil?
+        res = ""
+      elsif the_string.is_a?(Array)
+        res = @machine.encipher(the_string.join(" "))
+      elsif the_string.is_a?(String)
+        res = @machine.encipher(the_string)
+      else
+        res = @machine.encipher(the_string.to_s)
+      end
       @last_result = res
       res
     end

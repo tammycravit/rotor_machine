@@ -29,8 +29,8 @@ module RotorMachine
       set_positions: ["Set the rotor positions", "<positions>", "set_rotors"],
       clear_rotors: ["Clear the current rotor set", nil, nil],
       clear_plugboard: ["Clear the current plugboard configuration", nil, nil],
-      "help": ["Display help", "[command]", nil],
-      "version": ["Display the version of the rotor_machine library", nil, nil],
+      help: ["Display help", "[command]", nil],
+      version: ["Display the version of the rotor_machine library", nil, nil],
       about_prompt: ["Information about the shell prompt", nil, nil],
       about_rotors: ["List the names of available rotors", nil, nil],
       about_reflectors: ["List the names of available reflectors", nil, nil],
@@ -64,17 +64,17 @@ module RotorMachine
     def rotor(arglist)
       kind = arglist[0].to_sym
 
-      if arglist[1].nil? || arglist[1].empty?
+      if arglist[1].nil? || (arglist[1].is_a?(String) && arglist[1].empty?)
         position = 0
-      elsif arglist[1].is_number?
+      elsif arglist[1].is_a?(String) && arglist[1].is_number?
         position = arglist[1].to_i
       else
         position = arglist[1]
       end
 
-      if arglist[2].nil? || arglist[2].empty?
+      if arglist[2].nil? || (arglist[2].is_a?(String) && arglist[2].empty?)
         step_size = 1
-      elsif arglist[2].is_number?
+      elsif arglist[2].is_a?(String) && arglist[2].is_number?
         step_size = arglist[2].to_i
       else
         step_size = 1
@@ -92,9 +92,9 @@ module RotorMachine
     def reflector(arglist)
       kind = arglist[0].to_sym
 
-      if arglist[1].nil? || arglist[1].empty?
+      if arglist[1].nil? || (arglist[1].is_a?(String) && arglist[1].empty?)
         position = 0
-      elsif arglist[1].is_number?
+      elsif arglist[1].is_a?(String) && arglist[1].is_number?
         position = arglist[1].to_i
       else
         position = arglist[1]
@@ -229,7 +229,7 @@ module RotorMachine
 
     ##
     # Print the version number of the rotor_machine.
-    def version
+    def version(args)
       "rotor_machine version #{RotorMachine::VERSION}"
     end
 
@@ -298,18 +298,21 @@ module RotorMachine
     # If you redefine this method, you should also redefine the {#about_prompt}
     # method to describe the new prompt correctly.
     def readline_prompt
+      #:nocov:
       [
         "[#{@session.the_machine.rotors.count}]".colorize(color: :light_blue),
         "<#{@session.the_machine.plugboard.connections.count}>".colorize(color: :light_blue),
         "#{rotor_state}".colorize(color: :light_blue),
         "> ".colorize(color: :white),
       ].join(" ")
+      #:nocov:
     end
 
     ##
     # Display the about help for the REPL prompt. If you redefine the {#readline_prompt}
     # method, you should also redefine this to reflect the new prompt.
     def about_prompt(arglist)
+      #:nocov:
       puts ""
       puts "The prompt for the shell is in the following format:"
       puts ""
@@ -321,9 +324,11 @@ module RotorMachine
       puts "     YYY - the number of connections on the plugboard"
       puts "     ZZZ - the current positions of the rotors"
       ""
+      #:nocov:
     end
 
     def about_reflectors(arglist)
+      #:nocov:
       puts ""
       puts "The following reflectors are available with this machine:"
       puts ""
@@ -337,9 +342,11 @@ module RotorMachine
       puts "The REPL does not currently support custom reflectors."
       puts ""
       ""
+      #:nocov:
     end
 
     def about_rotors(arglist)
+      #:nocov:
       puts ""
       puts "The following rotors are available with this machine:"
       puts ""
@@ -354,11 +361,13 @@ module RotorMachine
       puts ""
       puts "The REPL does not currently support custom rotors."
       ""
+      #:nocov:
     end
 
     ##
     # Display the startup banner for the REPL application.
     def banner
+      #:nocov:
       puts "******************************************************************************".colorize(color: :white, background: :magenta)
       puts "*     rotor_machine: Simple simulation of the German WWII Enigma Machine     *".colorize(color: :white, background: :magenta)
       puts "*                   By Tammy Cravit <tammycravit@me.com>                     *".colorize(color: :white, background: :magenta)
@@ -367,6 +376,11 @@ module RotorMachine
       puts ""
       puts "rotor_machine version #{RotorMachine::VERSION}. Type 'help' for help. <Tab> to complete commands.".colorize(color: :magenta)
       puts ""
+      #:nocov:
+    end
+
+    def the_machine
+      return @session.the_machine
     end
 
     ########## REPL MAIN FUNCTION ##########
