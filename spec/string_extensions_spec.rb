@@ -94,4 +94,61 @@ RSpec.describe "RotorMachine::StringExtensions" do
       expect(@text.in_blocks).to be == "THISI SATES TOFIN BLOCK SOF"
     end
   end
+
+  context "#tokenize" do
+    it "should be a method of the string class" do
+      expect("test").to respond_to(:tokenize)
+    end
+
+    it "should split a string into tokens" do
+      toks = "this is a test".tokenize
+      expect(toks.count).to be == 4
+      expect(toks[0]).to be == "this"
+      expect(toks[1]).to be == "is"
+      expect(toks[2]).to be == "a"
+      expect(toks[3]).to be == "test"
+    end
+
+    it "should properly handle an empty string" do
+      toks = "".tokenize
+      expect(toks.count).to be == 0
+    end
+
+    it "should properly handle a quoted string" do
+      toks = 'this "is a" test'.tokenize
+      expect(toks.count).to be == 3
+      expect(toks[1]).to be == "is a"
+    end
+  end
+
+  context "#is_number?" do
+    it "should be a method of the string class" do
+      expect("test").to respond_to(:is_number?)
+    end
+
+    it "should be true for a positive integer" do
+      expect("100".is_number?).to be_truthy
+    end
+
+    it "should be true for a negative integer" do
+      expect("-100".is_number?).to be_truthy
+    end
+
+    it "should be true for a positive float" do
+      expect("100.345".is_number?).to be_truthy
+    end
+
+    it "should be true for a negative float" do
+      expect("-100.345".is_number?).to be_truthy
+    end
+
+    it "should be false for a non-numeric string" do
+      expect("fishpaste".is_number?).not_to be_truthy
+    end
+
+    it "should be false for an empty string" do
+      expect("".is_number?).not_to be_truthy
+    end
+  end
+
 end
