@@ -40,9 +40,12 @@ class String
       self.chars.reject{|s| s.match(/\s/)}.each_slice(block_size).map(&:join)
     end
   end
-
   alias :in_blocks :in_blocks_of
 
+  ##
+  # Break a string into words, including handling quoted substrings.
+  #
+  # @return An array of tokens, if the string can be tokenized.
   def tokenize
     self.
       split(/\s(?=(?:[^'"]|'[^']*'|"[^"]*")*$)/).
@@ -50,6 +53,10 @@ class String
       map {|s| s.gsub(/(^ +)|( +$)|(^["']+)|(["']+$)/,'')}
   end
 
+  ##
+  # Test if the string is a number.
+  #
+  # @return True if the string is a number, false otherwise.
   def is_number?
     true if Float(self) rescue false
   end
