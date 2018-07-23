@@ -34,7 +34,7 @@ module RotorMachine
       about_prompt: ["Information about the shell prompt", nil, nil],
       about_rotors: ["List the names of available rotors", nil, nil],
       about_reflectors: ["List the names of available reflectors", nil, nil],
-    }
+    }.freeze
 
     ##
     # Shell "external command" map. This functions the same as the {COMMANDS} list,
@@ -44,7 +44,7 @@ module RotorMachine
     {
       encipher: ["Encode a message", "[message]", "cipher,encode"],
       quit: ["Quit the application", nil, "exit"],
-    }
+    }.freeze
 
     ##
     # Initialize a new {RotorMachine::Shell} instance, and the interior
@@ -256,10 +256,15 @@ module RotorMachine
       COMMANDS.keys.include?(cmd) || aliases.include?(cmd)
     end
 
+    ##
+    # Return the "arity" (in this case, the number of mandatory arguments) for a
+    # command or its alias.
     def arity(cmd)
       if COMMANDS.keys.include?(cmd)
         if COMMANDS[cmd][1].nil?
+          #:nocov:
           return 0
+          #:nocov:
         else
           return COMMANDS[cmd][1].split(' ').select { |x| x.start_with?("<") }.count
         end
@@ -269,7 +274,9 @@ module RotorMachine
             v[2].split(',').each do |a|
               if a.to_sym == cmd.to_sym
                 if v[1].nil?
+                  #:nocov:
                   return 0
+                  #:nocov:
                 else
                   return v[1].split(' ').select { |x| x.start_with?("<") }.count
                 end
