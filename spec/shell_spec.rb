@@ -436,10 +436,4 @@ RSpec.describe "RotorMachine::Shell" do
       end
     end
   end
-
-  context "shell REPL" do
-    before(:all) do
-  #     @output, @input = PTY.spawn("exe/rotor_machine")
-    end
-  end
 end

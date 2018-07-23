@@ -385,6 +385,7 @@ module RotorMachine
 
     ########## REPL MAIN FUNCTION ##########
 
+    #:nocov:
     ##
     # Provide an interactive REPL for manipulating the Rotor Machine. Essentially
     # this REPL is an interactive wrapper around the {RotorMachine::Session} object,
@@ -430,4 +431,5 @@ module RotorMachine
       end
     end
   end
+  #:nocov:
 end
