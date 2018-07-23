@@ -60,4 +60,16 @@ class String
   def is_number?
     true if Float(self) rescue false
   end
+
+
+  ##
+  # Strip ANSI color sequences from the string.
+  #
+  # @return The string with ANSI color sequences escaped.
+  def uncolorize
+    pattern = /\033\[([0-9]+);([0-9]+);([0-9]+)m(.+?)\033\[0m|([^\033]+)/m
+    self.scan(pattern).inject("") do |str, match|
+      str << (match[3] || match[4])
+    end
+  end
 end
