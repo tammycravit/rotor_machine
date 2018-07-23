@@ -1,10 +1,10 @@
 ############################################################################
 # rotor_machine: Simple ruby implemenation of an Enigma rotor @machine.
 #
-# File        : dsl_spec.rb
-# Specs for   : The RotorMachine::Session class, which provides a DSL for
-#               (interactively and programmatically) manipulating a
-#               RotorMachine.
+# File        : shell_spec.rb
+# Specs for   : The RotorMachine::Shell class, which provides an interactive
+#               shell for the RotorMachine. The interactive REPL part of the
+#               shell is tested via shell_repl_spec.rb
 ############################################################################
 #  Copyright 2018, Tammy Cravit.
 #
@@ -24,7 +24,6 @@
 require 'rspec'
 require 'spec_helper'
 require 'rotor_machine'
-require 'pty'
 
 # Extensions to the String class to make testing a bit easier..
 require_helper_named('string_extensions')
