@@ -22,6 +22,7 @@
 require 'rspec'
 require 'spec_helper'
 require 'rotor_machine'
+require 'colorize'
 
 # Extensions to the String class to make testing a bit easier..
 require_helper_named('string_extensions')
@@ -151,4 +152,19 @@ RSpec.describe "RotorMachine::StringExtensions" do
     end
   end
 
+  context "#uncolorize" do
+    it "should remove color sequences from the string" do
+      orig_string = "This is a test".colorize(color: :light_blue)
+      new_string = orig_string.clone.uncolorize
+      expect(new_string).to be == "This is a test"
+      expect(new_string).not_to be == orig_string
+    end
+
+    it "should not modify an uncolorized string" do
+      orig_string = "This is a test"
+      new_string = orig_string.clone.uncolorize
+      expect(new_string).to be == "This is a test"
+      expect(new_string).to be == orig_string
+    end
+  end
 end
