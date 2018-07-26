@@ -22,7 +22,6 @@
 require 'rspec'
 require 'spec_helper'
 require 'rotor_machine'
-require 'pty'
 
 # Extensions to the String class to make testing a bit easier..
 require_helper_named('string_extensions')
@@ -33,5 +32,32 @@ require_custom_matcher_named("reflector_state")
 
 RSpec.describe "RotorMachine::Shell" do
   context "REPL Interface" do
+    it "should allow the REPL to be launched from the class helper method" do
+      expect{ RotorMachine::Shell.repl(["version"]) }.to output(RotorMachine::Shell.new().banner).to_stdout()
+    end
+
+    it "should display the app banner" do
+      expect{ RotorMachine::Shell.new().repl(["version"]) }.to output(RotorMachine::Shell.new().banner).to_stdout()
+    end
+
+    it "should display the last encryption result" do
+      expect{ RotorMachine::Shell.new().repl(["encipher THIS IS A TEST", "last_result"]) }.to output(/QCTBG IJSWI H/).to_stdout()
+    end
+
+    it "should encipher text when asked" do
+      expect{ RotorMachine::Shell.new().repl(["encipher THIS IS A TEST"]) }.to output(/QCTBG IJSWI H/).to_stdout()
+    end
+
+    it "should display an error message when an invalid command is entered" do
+      expect{ RotorMachine::Shell.new().repl(["invalid"]) }.to output(/Unknown command: invalid/).to_stdout()
+    end
+
+    it "should display an error when a command has the wrong arity" do
+      expect{ RotorMachine::Shell.new().repl(["rotor"]) }.to output(/rotor requires at least 1 arguments/).to_stdout()
+    end
+
+    it "should display an error when a command raises an exception" do
+      expect{ RotorMachine::Shell.new().repl([" "]) }.to output(/Rescued exception: undefined method \`downcase\' for nil:NilClass/).to_stdout()
+    end
   end
 end

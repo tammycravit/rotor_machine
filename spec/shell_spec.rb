@@ -43,6 +43,11 @@ RSpec.describe "RotorMachine::Shell" do
       expect(@shell).to be_a(RotorMachine::Shell)
       expect(@shell.the_machine).to be_a(RotorMachine::Machine)
     end
+
+    it "should have a RotorMachine::Session instance" do
+      expect(@shell).to be_a(RotorMachine::Shell)
+      expect(@shell.the_session).to be_a(RotorMachine::Session)
+    end
   end
 
   context "shell command methods" do
@@ -409,6 +414,17 @@ RSpec.describe "RotorMachine::Shell" do
 
       it "should return 0 for a nonexistent command" do
         expect(@shell.arity(:nonexistent)).to be == 0
+      end
+    end
+
+    context "#readline_prompt" do
+      it "should return the readline prompt with the machine state" do
+        p = @shell.readline_prompt.uncolorize.tokenize
+        expect(p.count).to be == 4
+        expect(p[0]).to be == "[#{@shell.the_machine.rotors.count}]"
+        expect(p[1]).to be == "<#{@shell.the_machine.plugboard.connections.count}>"
+        expect(p[2]).to be == @shell.rotor_state
+        expect(p[3]).to be == ">"
       end
     end
 

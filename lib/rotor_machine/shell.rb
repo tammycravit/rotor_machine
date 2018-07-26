@@ -305,14 +305,12 @@ module RotorMachine
     # If you redefine this method, you should also redefine the {#about_prompt}
     # method to describe the new prompt correctly.
     def readline_prompt
-      #:nocov:
       [
         "[#{@session.the_machine.rotors.count}]".colorize(color: :light_blue),
         "<#{@session.the_machine.plugboard.connections.count}>".colorize(color: :light_blue),
         "#{rotor_state}".colorize(color: :light_blue),
         "> ".colorize(color: :white),
       ].join(" ")
-      #:nocov:
     end
 
     ##
@@ -390,53 +388,92 @@ module RotorMachine
       return @session.the_machine
     end
 
+    def the_session
+      return @session
+    end
+
     ########## REPL MAIN FUNCTION ##########
 
-    #:nocov:
+    ##
+    # Process a single command from the REPL and display its output.
+    #
+    # This method is called for all commands except for "quit" and "exit", which are
+    # processed by {#repl} directly.
+    #
+    # @param input [String] The command line provided by the REPL (or the test).
+    # @return [Symbol] One of :SUCCESS, :EXCEPTION, :ARITY, :INVALID_COMMAND 
+    # depending on whether the command was recognized and executed.
+    def process_command_input(input)
+      begin
+        unless input.empty?
+          toks = input.tokenize
+          cmd = toks.shift.downcase.strip
+
+          if ['cipher', 'encipher', 'encode'].include?(cmd)
+            message = toks.join(' ')
+            puts self.encipher(message).colorize(color: :white).bold
+            return :SUCCESS
+          elsif self.is_internal_verb?(cmd.to_sym)
+            begin
+              if toks.length >= arity(cmd.to_sym)
+                if cmd == "last_result"
+                  puts self.send(cmd.to_sym, toks).colorize(color: :white).bold
+                else
+                  puts self.send(cmd.to_sym, toks).colorize(color: :green)
+                end
+                return :SUCCESS
+              else
+                puts "Command #{cmd} requires at least #{arity(cmd.to_sym)} arguments".colorize(color: :red)
+                return :ARITY
+              end
+            end
+          else
+            puts "Unknown command: #{cmd}".colorize(color: :light_red).bold
+            return :INVALID_COMMAND
+          end
+        end
+      rescue StandardError => e
+        puts "Rescued exception: #{e}".colorize(color: :red)
+        return :EXCEPTION
+      end
+    end
+
     ##
     # Provide an interactive REPL for manipulating the Rotor Machine. Essentially
     # this REPL is an interactive wrapper around the {RotorMachine::Session} object,
     # with tab completion and command history provided by the {Readline} library.
-    def repl
+    #
+    # @param commands [Array] If provided, the commands passed in will be executed
+    # in sequence. This is mainly intended for RSpec testing. If no commands are
+    # passed in, the interactive REPL loop (with Readline) will be launched instead.
+    def repl(commands=nil)
       Readline.completion_append_character = " "
       Readline.completion_proc = proc { |s| verbs.keys.grep(/^#{Regexp.escape(s)}/)  }
 
       banner
 
-      while input = Readline.readline(readline_prompt, true)
-        begin
-          unless input.empty?
-            toks = input.tokenize
-            cmd = toks.shift.downcase.strip
-
-            if ['cipher', 'encipher', 'encode'].include?(cmd)
-              message = toks.join(' ')
-              puts self.encipher(message).colorize(color: :white).bold
-            elsif ['exit', 'quit'].include?(cmd)
-              break
-            elsif self.is_internal_verb?(cmd.to_sym)
-              begin
-                if toks.length >= arity(cmd.to_sym)
-                  if cmd == "last_result"
-                    puts self.send(cmd.to_sym, toks).colorize(color: :white).bold
-                  else
-                    puts self.send(cmd.to_sym, toks).colorize(color: :green)
-                  end
-                else
-                  puts "Command #{cmd} requires at least #{arity(cmd.to_sym)} arguments".colorize(color: :red)
-                end
-              rescue Exception => ex
-                puts "Error: #{ex}".colorize(color: :red)
-              end
-            else
-              puts "Unknown command: #{cmd}".colorize(color: :light_red).bold
-            end
+      if commands.nil? || commands.empty?
+        #:nocov:
+        while input = Readline.readline(readline_prompt, true).strip
+          if ['exit', 'quit'].include?(input.downcase)
+            return
           end
-        rescue StandardError => e
-          puts "Rescued exception: #{e}".colorize(color: :red)
+          process_command_input(input)
         end
+        #:nocov:
+      else
+        commands.each { |cmd| process_command_input(cmd) }
       end
     end
+
+    ##
+    # Helper for instantiating a new REPL.
+    #
+    # @param commands [Array] If provided, the commands passed in will be executed
+    # in sequence. This is mainly intended for RSpec testing. If no commands are
+    # passed in, the interactive REPL loop (with Readline) will be launched instead.
+    def self.repl(commands=nil)
+      RotorMachine::Shell.new().repl(commands)
+    end
   end
-  #:nocov:
 end
