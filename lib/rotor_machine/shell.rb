@@ -261,25 +261,13 @@ module RotorMachine
     # command or its alias.
     def arity(cmd)
       if COMMANDS.keys.include?(cmd)
-        if COMMANDS[cmd][1].nil?
-          #:nocov:
-          return 0
-          #:nocov:
-        else
-          return COMMANDS[cmd][1].split(' ').select { |x| x.start_with?("<") }.count
-        end
+        return COMMANDS[cmd][1].split(' ').select { |x| x.start_with?("<") }.count
       else
         COMMANDS.each do |k, v|
           unless v[2].nil?
             v[2].split(',').each do |a|
               if a.to_sym == cmd.to_sym
-                if v[1].nil?
-                  #:nocov:
-                  return 0
-                  #:nocov:
-                else
-                  return v[1].split(' ').select { |x| x.start_with?("<") }.count
-                end
+                return v[1].split(' ').select { |x| x.start_with?("<") }.count
               end
             end
           end
@@ -372,7 +360,6 @@ module RotorMachine
     ##
     # Display the startup banner for the REPL application.
     def banner
-      #:nocov:
       puts "******************************************************************************".colorize(color: :white, background: :magenta)
       puts "*     rotor_machine: Simple simulation of the German WWII Enigma Machine     *".colorize(color: :white, background: :magenta)
       puts "*                   By Tammy Cravit <tammycravit@me.com>                     *".colorize(color: :white, background: :magenta)
@@ -381,7 +368,6 @@ module RotorMachine
       puts ""
       puts "rotor_machine version #{RotorMachine::VERSION}. Type 'help' for help. <Tab> to complete commands.".colorize(color: :magenta)
       puts ""
-      #:nocov:
     end
 
     def the_machine
@@ -412,7 +398,6 @@ module RotorMachine
           if ['cipher', 'encipher', 'encode'].include?(cmd)
             message = toks.join(' ')
             puts self.encipher(message).colorize(color: :white).bold
-            return :SUCCESS
           elsif self.is_internal_verb?(cmd.to_sym)
             begin
               if toks.length >= arity(cmd.to_sym)
@@ -421,20 +406,16 @@ module RotorMachine
                 else
                   puts self.send(cmd.to_sym, toks).colorize(color: :green)
                 end
-                return :SUCCESS
               else
                 puts "Command #{cmd} requires at least #{arity(cmd.to_sym)} arguments".colorize(color: :red)
-                return :ARITY
               end
             end
           else
             puts "Unknown command: #{cmd}".colorize(color: :light_red).bold
-            return :INVALID_COMMAND
           end
         end
       rescue StandardError => e
         puts "Rescued exception: #{e}".colorize(color: :red)
-        return :EXCEPTION
       end
     end
 
