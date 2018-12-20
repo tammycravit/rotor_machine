@@ -1,6 +1,6 @@
 # RotorMachine
 
-![German Enigma machine](https://github.com/tammycravit/rotor_machine/blob/master/images/Bundesarchiv_Enigma.jpg?raw=1)
+![German Enigma machine](https://github.com/tammymakesthings/rotor_machine/blob/master/images/Bundesarchiv_Enigma.jpg?raw=1)
 
 The `RotorMachine` gem provides a simple Ruby implementation of the
 [Enigma](https://en.wikipedia.org/wiki/Enigma_machine) rotor encryption machine.
@@ -33,29 +33,29 @@ Or install it yourself as:
 
 ## Architecture
 
-The [`RotorMachine::Machine`](http://www.rubydoc.info/github/tammycravit/rotor_machine/master/RotorMachine/Machine)
+The [`RotorMachine::Machine`](http://www.rubydoc.info/github/tammymakesthings/rotor_machine/master/RotorMachine/Machine)
 class serves as the entrypoint and orchestrator for an Enigma machine.
 
 ### Components of an Enigma machine
 
-The Enigma machine, as represented by the [RotorMachine](http://www.rubydoc.info/github/tammycravit/rotor_machine/master)
+The Enigma machine, as represented by the [RotorMachine](http://www.rubydoc.info/github/tammymakesthings/rotor_machine/master)
 module, consists of the following components:
 
-* One or more [rotors](http://www.rubydoc.info/github/tammycravit/rotor_machine/master/RotorMachine/Rotor), which
+* One or more [rotors](http://www.rubydoc.info/github/tammymakesthings/rotor_machine/master/RotorMachine/Rotor), which
   perform the transposition ciphering and also rotate to produce a polyalphabetic (rather
   than simple substitution) cipher.
 
-* A [reflector](http://www.rubydoc.info/github/tammycravit/rotor_machine/master/RotorMachine/Reflector), which
+* A [reflector](http://www.rubydoc.info/github/tammymakesthings/rotor_machine/master/RotorMachine/Reflector), which
   performs a simple symmetric substitution of letters
 
-* A [plugboard](http://www.rubydoc.info/github/tammycravit/rotor_machine/master/RotorMachine/Plugboard), which
+* A [plugboard](http://www.rubydoc.info/github/tammymakesthings/rotor_machine/master/RotorMachine/Plugboard), which
   allows pairs of letters to be transposed on a per-message basis.
 
 On an actual Enigma machine, these components are all electromechanical, and
 the Enigma also included a keyboard, a grid of lights to show the results, and
 in some cases a printer. Since this is a simulated Enigma, obviously, no
 keyboard/printer are supplied here. In this simulation, the
-[Machine](http://www.rubydoc.info/github/tammycravit/rotor_machine/master/RotorMachine/Machine)
+[Machine](http://www.rubydoc.info/github/tammymakesthings/rotor_machine/master/RotorMachine/Machine)
 class serves to encapsulate all of these components.
 
 The polyalphabetic encryption of the Enigma comes from the fact that the
@@ -79,7 +79,7 @@ visit [Enigma Machine (Wikipedia)](https://en.wikipedia.org/wiki/Enigma_machine)
 Here's a visual depiction of the signal path of a single character through
 a (physical) Enigma machine:
 
-![Enigma signal path](https://github.com/tammycravit/rotor_machine/blob/master/images/File:Enigma_wiring_kleur.png?raw=1)
+![Enigma signal path](https://github.com/tammymakesthings/rotor_machine/blob/master/images/File:Enigma_wiring_kleur.png?raw=1)
 
 As you can see, the electrical signal from a keypress is routed through the
 plugboard, then through each of the rotors in sequence from left to right.
@@ -208,10 +208,10 @@ details.
 ## Documentation
 
 The classes in
-[`lib/rotor_machine/`](https://github.com/tammycravit/rotor_machine/tree/master/lib/rotor_machine)
-all contain [documentation](http://www.rubydoc.info/github/tammycravit/rotor_machine/master/) that
+[`lib/rotor_machine/`](https://github.com/tammymakesthings/rotor_machine/tree/master/lib/rotor_machine)
+all contain [documentation](http://www.rubydoc.info/github/tammymakesthings/rotor_machine/master/) that
 pretty exhaustively describe their operation.
-The RSpec tests in the [`spec/`](https://github.com/tammycravit/rotor_machine/tree/master/spec)
+The RSpec tests in the [`spec/`](https://github.com/tammymakesthings/rotor_machine/tree/master/spec)
 directory are also instructive for how the library works and how to use it.
 
 ## Development
@@ -226,19 +226,19 @@ To release a new version, update the version number in `version.rb`, and then
 run `bundle exec rake release`, which will create a git tag for the version,
 push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
-This gem depends on the [`tcravit_ruby_lib`](https://github.com/tammycravit/tcravit_ruby_lib)
+This gem depends on the [`tcravit_ruby_lib`](https://github.com/tammymakesthings/tcravit_ruby_lib)
 gem, which provides Rake tasks to update the version number. You can use the
 `bundle exec rake version:bump:build`, `bundle exec version:bump:minor` and
 `bundle exec rake version:bump:major` tasks to increment the parts of
 the version number. (These tasks rewrite the file
-[`lib/rotor_machine/version.rb`](https://github.com/tammycravit/rotor_machine/blob/master/lib/rotor_machine/version.rb).
+[`lib/rotor_machine/version.rb`](https://github.com/tammymakesthings/rotor_machine/blob/master/lib/rotor_machine/version.rb).
 After using them, you'll need to run a `git add lib/rotor_machine/version.rb`
 and `git commit -m "version bump"`.
 
 ### Contributing
 
 Bug reports and pull requests are welcome on GitHub at
-[https://github.com/tammycravit/rotor_machine]. Pull requests for code changes
+[https://github.com/tammymakesthings/rotor_machine]. Pull requests for code changes
 should include [RSpec](http://rspec.info) tests for the new/changed features.
 Pull requests for documentation and other updates are also welcome.
 
@@ -252,7 +252,7 @@ and members of other marginalized communities are especially welcomed.
 
 Everyone interacting in the RotorMachine project’s codebases, issue trackers,
 chat rooms and mailing lists is expected to follow the
-[code of conduct](https://github.com/tammycravit/rotor_machine/blob/master/CODE_OF_CONDUCT.md).
+[code of conduct](https://github.com/tammymakesthings/rotor_machine/blob/master/CODE_OF_CONDUCT.md).
 
 ## License
 
